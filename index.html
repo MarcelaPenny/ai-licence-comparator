@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Licence Compass — Jaká data smíte dát do AI? | ADVALO</title>
+  <meta name="description" content="Kompletní průvodce licencemi ChatGPT, Claude, Gemini a Copilot pro finanční poradce v ČR. Zjistěte, jaká data smíte dát do jakého AI nástroje.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC:wght@400;500;700&family=Alegreya+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            dark: '#001e17',
+            ink: '#22242b',
+            brand: '#7ad654',
+            'brand-50': '#f2fbec',
+            'brand-100': '#def6cb',
+            'brand-600': '#5ec036',
+            'brand-700': '#489728',
+            surface: '#f6f6f6',
+            allowed: '#22c55e',
+            conditional: '#f59e0b',
+            forbidden: '#ef4444',
+          },
+          fontFamily: {
+            sans: ["'Alegreya Sans'", 'system-ui', 'sans-serif'],
+            heading: ["'Alegreya Sans SC'", "'Alegreya Sans'", 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'Alegreya Sans', system-ui, sans-serif; color: #22242b; background: #fff; }
+    h1,h2,h3,h4 { font-family: 'Alegreya Sans SC', 'Alegreya Sans', system-ui, sans-serif; }
+    .section-label { text-transform: uppercase; font-weight: 600; color: #7ad654; letter-spacing: 1px; font-size: 13px; }
+    .btn-primary { background: #7ad654; color: #001e17; font-weight: 700; padding: 14px 28px; border-radius: 8px; border: none; cursor: pointer; font-family: 'Alegreya Sans', sans-serif; font-size: 16px; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-primary:hover { background: #5ec036; transform: translateY(-1px); }
+    .btn-outline { background: transparent; color: #fff; font-weight: 600; padding: 14px 28px; border-radius: 8px; border: 2px solid rgba(255,255,255,0.4); cursor: pointer; font-family: 'Alegreya Sans', sans-serif; font-size: 16px; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-outline:hover { border-color: #7ad654; color: #7ad654; }
+    .btn-dark-outline { background: transparent; color: #001e17; font-weight: 600; padding: 12px 24px; border-radius: 8px; border: 2px solid #001e17; cursor: pointer; font-family: 'Alegreya Sans', sans-serif; font-size: 15px; transition: all 0.3s ease; }
+    .btn-dark-outline:hover { background: #001e17; color: #fff; }
+    .nav-link { font-weight: 500; font-size: 15px; color: #22242b; text-decoration: none; transition: color 0.3s; white-space: nowrap; }
+    .nav-link:hover { color: #7ad654; }
+    .card { background: #fff; border: 1px solid #def6cb; border-radius: 10px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: all 0.3s ease; }
+    .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); transform: translateY(-2px); }
+    .card-dark { background: #001e17; border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; padding: 30px; color: #fff; }
+    .verdict-allowed { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+    .verdict-conditional { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+    .verdict-forbidden { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+    .verdict-badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; white-space: nowrap; }
+    .accordion-btn { width: 100%; text-align: left; background: none; border: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; font-family: 'Alegreya Sans', sans-serif; font-size: 15px; font-weight: 600; padding: 12px 0; border-bottom: 1px solid #def6cb; color: #22242b; transition: color 0.2s; }
+    .accordion-btn:hover { color: #7ad654; }
+    .accordion-btn .chevron { transition: transform 0.3s; flex-shrink: 0; }
+    .accordion-btn.open .chevron { transform: rotate(180deg); }
+    .accordion-content { display: none; padding: 12px 0 16px 0; }
+    .accordion-content.open { display: block; }
+    .matrix-table { border-collapse: collapse; width: 100%; min-width: 720px; }
+    .matrix-table th { background: #001e17; color: #fff; padding: 12px 16px; font-family: 'Alegreya Sans SC', sans-serif; font-size: 13px; text-align: left; white-space: nowrap; position: sticky; top: 0; z-index: 10; }
+    .matrix-table th:first-child { position: sticky; left: 0; z-index: 20; }
+    .matrix-table td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; font-size: 14px; }
+    .matrix-table td:first-child { position: sticky; left: 0; background: #fff; z-index: 5; font-weight: 600; font-size: 13px; white-space: nowrap; border-right: 2px solid #def6cb; }
+    .matrix-table tr:nth-child(even) td { background: #f9f9f9; }
+    .matrix-table tr:nth-child(even) td:first-child { background: #f9f9f9; }
+    .matrix-table tr:hover td { background: #f2fbec !important; cursor: pointer; }
+    .cell-verdict { display: flex; align-items: center; justify-content: center; gap: 4px; padding: 6px 10px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; min-width: 100px; text-align: center; transition: all 0.2s; white-space: nowrap; }
+    .cell-verdict:hover { filter: brightness(0.95); transform: scale(1.02); }
+    .provider-badge { font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px; margin-left: 6px; }
+    .provider-openai { background: #e0e7ff; color: #3730a3; }
+    .provider-anthropic { background: #fce7f3; color: #9d174d; }
+    .provider-google { background: #fef9c3; color: #854d0e; }
+    .provider-microsoft { background: #dbeafe; color: #1e40af; }
+    .wizard-step { display: none; }
+    .wizard-step.active { display: block; }
+    .data-card { border: 2px solid #def6cb; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.3s ease; background: #fff; }
+    .data-card:hover { border-color: #7ad654; background: #f2fbec; transform: translateY(-2px); }
+    .data-card.selected { border-color: #7ad654; background: #f2fbec; }
+    .progress-bar { height: 4px; background: #def6cb; border-radius: 4px; overflow: hidden; }
+    .progress-fill { height: 100%; background: #7ad654; border-radius: 4px; transition: width 0.4s ease; }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; display: flex; align-items: flex-end; justify-content: center; padding: 0; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+    @media (min-width: 768px) { .modal-overlay { align-items: center; padding: 20px; } }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal-box { background: #fff; border-radius: 16px 16px 0 0; width: 100%; max-width: 680px; max-height: 90vh; overflow-y: auto; padding: 24px; position: relative; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94); }
+    @media (min-width: 768px) { .modal-box { border-radius: 16px; transform: translateY(20px) scale(0.97); } }
+    .modal-overlay.open .modal-box { transform: translateY(0) scale(1); }
+    .glossary-term { text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 3px; cursor: pointer; color: inherit; font-weight: 500; }
+    .tooltip { position: absolute; background: #001e17; color: #fff; padding: 8px 14px; border-radius: 8px; font-size: 13px; max-width: 280px; z-index: 500; pointer-events: none; line-height: 1.5; box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .bottom-sheet { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-radius: 20px 20px 0 0; z-index: 900; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94); padding: 24px; max-height: 80vh; overflow-y: auto; box-shadow: 0 -4px 32px rgba(0,0,0,0.2); }
+    .bottom-sheet.open { transform: translateY(0); }
+    .bottom-sheet-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 850; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+    .bottom-sheet-overlay.open { opacity: 1; pointer-events: all; }
+    .filter-select { padding: 8px 12px; border: 1px solid #def6cb; border-radius: 8px; background: #fff; font-family: 'Alegreya Sans', sans-serif; font-size: 14px; color: #22242b; cursor: pointer; outline: none; transition: border-color 0.2s; }
+    .filter-select:focus { border-color: #7ad654; }
+    .timeline-item { display: flex; align-items: flex-start; gap: 16px; padding: 12px 0; }
+    .timeline-dot { width: 14px; height: 14px; border-radius: 50%; background: #7ad654; flex-shrink: 0; margin-top: 4px; }
+    .timeline-dot.past { background: #5ec036; }
+    .timeline-dot.future { background: #def6cb; border: 2px solid #7ad654; }
+    .check-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px dashed #def6cb; }
+    .check-box { width: 22px; height: 22px; border: 2px solid #7ad654; border-radius: 5px; flex-shrink: 0; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
+    .check-box.checked { background: #7ad654; }
+    a.legal-link { color: #5ec036; text-decoration: underline; text-underline-offset: 2px; font-size: 13px; display: inline-flex; align-items: center; gap: 3px; }
+    a.legal-link:hover { color: #489728; }
+    @media (max-width: 767px) {
+      .matrix-table { display: none; }
+      .matrix-cards { display: block !important; }
+    }
+    .matrix-cards { display: none; }
+    nav { position: sticky; top: 0; z-index: 100; background: #fff; border-bottom: 1px solid #def6cb; }
+    .hamburger { display: none; }
+    @media (max-width: 1023px) { .hamburger { display: flex; } .nav-links { display: none; } .nav-links.open { display: flex; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: #fff; border-bottom: 1px solid #def6cb; padding: 16px 24px; gap: 12px; z-index: 200; } }
+    .section-alt { background: #f6f6f6; }
+    .section-dark { background: #001e17; color: #fff; }
+    section { padding: 80px 0; }
+    @media (max-width: 767px) { section { padding: 48px 0; } }
+    .tool-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .tool-icon-openai { background: #e0e7ff; }
+    .tool-icon-anthropic { background: #fce7f3; }
+    .tool-icon-google { background: #fef9c3; }
+    .tool-icon-microsoft { background: #dbeafe; }
+  </style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-[64px] md:h-[80px]">
+      <div class="flex items-center gap-3">
+        <div style="font-family:'Alegreya Sans SC',sans-serif;font-weight:700;font-size:22px;color:#001e17;letter-spacing:1px;">ADVALO</div>
+        <div style="width:1px;height:20px;background:#def6cb;"></div>
+        <div style="font-size:13px;color:#7ad654;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;">AI Licence Compass</div>
+      </div>
+      <div class="nav-links flex items-center gap-6" id="navLinks">
+        <a href="#porovnani" class="nav-link">Srovnání</a>
+        <a href="#pruvodce" class="nav-link">Průvodce</a>
+        <a href="#klasifikace" class="nav-link">Klasifikace dat</a>
+        <a href="#regulace" class="nav-link">Regulace</a>
+        <a href="#slovnik" class="nav-link">Slovník</a>
+        <a href="#co-delat" class="nav-link">Co dělat</a>
+      </div>
+      <button class="hamburger items-center justify-center w-10 h-10 rounded-lg hover:bg-gray-100" onclick="toggleNav()" aria-label="Menu">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 6h16M3 11h16M3 16h16" stroke="#22242b" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="section-dark" id="hero" style="padding-top:80px;padding-bottom:80px;">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center">
+      <div class="section-label mb-4" style="color:#7ad654;">Průvodce pro finanční poradce v ČR</div>
+      <h1 style="font-size:clamp(36px,6vw,65px);font-weight:600;line-height:1;color:#fff;margin-bottom:24px;">
+        Jaká data smíte<br>dát do AI?
+      </h1>
+      <p style="font-size:clamp(16px,2vw,20px);color:rgba(255,255,255,0.8);max-width:680px;margin:0 auto 40px;line-height:1.6;">
+        Kompletní průvodce licencemi ChatGPT, Claude, Gemini a Copilot.<br>
+        Za 30 sekund zjistíte verdikt. Za 3 minuty pochopíte proč.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="#pruvodce"><button class="btn-primary">→ Najít správný nástroj</button></a>
+        <a href="#porovnani"><button class="btn-outline">Porovnat všechny nástroje</button></a>
+      </div>
+      <div style="margin-top:40px;padding:16px 20px;background:rgba(122,214,84,0.1);border:1px solid rgba(122,214,84,0.3);border-radius:10px;display:inline-flex;align-items:center;gap:8px;font-size:14px;color:rgba(255,255,255,0.7);">
+        <span style="color:#7ad654;">⏱</span> Stav k červnu 2026 · Není právní rada · Nástroj připravila společnost ADVALO s.r.o.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WIZARD -->
+<section id="pruvodce" style="background:#fff;">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <div class="section-label mb-3">Průvodce výběrem</div>
+      <h2 style="font-size:clamp(28px,4vw,40px);font-weight:600;color:#001e17;margin-bottom:16px;">Jaká data → Jaký nástroj</h2>
+      <p style="color:#6b7280;font-size:18px;">3 tapnutí → konkrétní odpověď</p>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="mb-8">
+      <div class="flex justify-between text-sm mb-2" style="color:#6b7280;">
+        <span id="stepLabel">Krok 1 ze 3</span>
+        <span id="stepName">Typ dat</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:33%"></div></div>
+    </div>
+
+    <!-- Step 1 -->
+    <div class="wizard-step active" id="step1">
+      <h3 style="font-size:22px;font-weight:600;margin-bottom:24px;text-align:center;color:#001e17;">S jakými daty chci pracovat?</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="data-card" onclick="selectDataType('public')" data-type="public">
+          <div style="font-size:36px;margin-bottom:12px;">🌐</div>
+          <div style="font-weight:700;font-size:18px;margin-bottom:6px;color:#001e17;">Veřejná data</div>
+          <div style="color:#6b7280;font-size:14px;">Marketingové texty, ceníky, blogy, anonymizovaný obsah bez identifikovatelných osob</div>
+        </div>
+        <div class="data-card" onclick="selectDataType('internal')" data-type="internal">
+          <div style="font-size:36px;margin-bottom:12px;">🏢</div>
+          <div style="font-weight:700;font-size:18px;margin-bottom:6px;color:#001e17;">Interní firemní</div>
+          <div style="color:#6b7280;font-size:14px;">Postupy, šablony, KPI bez identifikátorů, interní dokumenty (bez osobních údajů)</div>
+        </div>
+        <div class="data-card" onclick="selectDataType('confidential')" data-type="confidential">
+          <div style="font-size:36px;margin-bottom:12px;">🔒</div>
+          <div style="font-weight:700;font-size:18px;margin-bottom:6px;color:#001e17;">Klientská běžná</div>
+          <div style="color:#6b7280;font-size:14px;">Jména, kontakty, smlouvy, příjmy — bez RČ, bez lékařských a trestních dat</div>
+        </div>
+        <div class="data-card" onclick="selectDataType('restricted')" data-type="restricted">
+          <div style="font-size:36px;margin-bottom:12px;">🚨</div>
+          <div style="font-weight:700;font-size:18px;margin-bottom:6px;color:#001e17;">Klientská citlivá</div>
+          <div style="color:#6b7280;font-size:14px;">Rodné číslo, lékařské zprávy, policejní protokoly, kopie dokladů</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="wizard-step" id="step2">
+      <button onclick="wizardBack()" style="margin-bottom:20px;background:none;border:none;cursor:pointer;color:#7ad654;font-family:'Alegreya Sans',sans-serif;font-size:15px;font-weight:600;display:flex;align-items:center;gap:6px;">← Zpět</button>
+      <h3 style="font-size:22px;font-weight:600;margin-bottom:24px;text-align:center;color:#001e17;" id="step2Title">Upřesněte typ dat</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="step2Cards"></div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="wizard-step" id="step3">
+      <button onclick="wizardBack()" style="margin-bottom:20px;background:none;border:none;cursor:pointer;color:#7ad654;font-family:'Alegreya Sans',sans-serif;font-size:15px;font-weight:600;display:flex;align-items:center;gap:6px;">← Zpět</button>
+      <h3 style="font-size:22px;font-weight:600;margin-bottom:8px;text-align:center;color:#001e17;" id="step3Title">Výsledek</h3>
+      <p style="text-align:center;color:#6b7280;margin-bottom:32px;font-size:15px;" id="step3Subtitle"></p>
+      <div id="step3Content"></div>
+      <div style="text-align:center;margin-top:32px;">
+        <button onclick="wizardReset()" class="btn-dark-outline">Zkusit jiný typ dat</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MATRIX -->
+<section id="porovnani" class="section-alt">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-10">
+      <div class="section-label mb-3">Srovnávací matice</div>
+      <h2 style="font-size:clamp(28px,4vw,40px);font-weight:600;color:#001e17;margin-bottom:16px;">Nástroj × Třída dat</h2>
+      <p style="color:#6b7280;font-size:18px;">Klikněte na buňku pro detailní vysvětlení a právní základ</p>
+    </div>
+
+    <!-- Filters -->
+    <div class="flex flex-wrap gap-3 mb-6">
+      <select class="filter-select" id="filterProvider" onchange="filterMatrix()">
+        <option value="">Všichni poskytovatelé</option>
+        <option value="openai">OpenAI</option>
+        <option value="anthropic">Anthropic</option>
+        <option value="google">Google</option>
+        <option value="microsoft">Microsoft</option>
+      </select>
+      <select class="filter-select" id="filterLicense" onchange="filterMatrix()">
+        <option value="">Všechny typy licencí</option>
+        <option value="personal">Osobní</option>
+        <option value="team">Team</option>
+        <option value="enterprise">Enterprise</option>
+        <option value="api">API</option>
+      </select>
+      <select class="filter-select" id="filterSafe" onchange="filterMatrix()">
+        <option value="">Vhodnost pro klientská data</option>
+        <option value="yes">Vhodné pro klientská data</option>
+        <option value="no">Nevhodné pro klientská data</option>
+      </select>
+      <button onclick="clearFilters()" style="padding:8px 14px;background:none;border:1px solid #def6cb;border-radius:8px;cursor:pointer;font-size:13px;color:#6b7280;font-family:'Alegreya Sans',sans-serif;">✕ Vymazat filtry</button>
+    </div>
+
+    <!-- Desktop table -->
+    <div style="overflow-x:auto;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+      <table class="matrix-table" id="matrixTable">
+        <thead>
+          <tr>
+            <th style="min-width:200px;">Nástroj / Licence</th>
+            <th style="min-width:120px;text-align:center;">🌐 Public</th>
+            <th style="min-width:120px;text-align:center;">🏢 Internal</th>
+            <th style="min-width:130px;text-align:center;">🔒 Confidential</th>
+            <th style="min-width:130px;text-align:center;">🚨 Restricted</th>
+            <th style="min-width:100px;text-align:center;">DPA</th>
+          </tr>
+        </thead>
+        <tbody id="matrixBody"></tbody>
+      </table>
+    </div>
+
+    <!-- Mobile cards -->
+    <div class="matrix-cards" id="matrixCards"></div>
+
+    <!-- Legend -->
+    <div class="flex flex-wrap gap-4 mt-6 justify-center">
+      <div class="verdict-badge verdict-allowed">✅ Povoleno</div>
+      <div class="verdict-badge verdict-conditional">⚠️ S podmínkami</div>
+      <div class="verdict-badge verdict-forbidden">🚫 Neakceptovatelné</div>
+    </div>
+  </div>
+</section>
+
+<!-- KLASIFIKACE DAT -->
+<section id="klasifikace">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <div class="section-label mb-3">Klasifikace dat</div>
+      <h2 style="font-size:clamp(28px,4vw,40px);font-weight:600;color:#001e17;margin-bottom:16px;">Co je jaká třída?</h2>
+      <p style="color:#6b7280;font-size:18px;">Pochopte, do jaké třídy patří vaše data, než použijete matici</p>
+    </div>
+
+    <!-- 4 class cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+      <div class="card" style="border-top:4px solid #22c55e;">
+        <div style="font-size:28px;margin-bottom:8px;">🌐</div>
+        <div style="font-weight:700;font-size:16px;color:#001e17;margin-bottom:8px;">Public</div>
+        <div style="font-size:13px;color:#6b7280;margin-bottom:12px;">Obsah bez osobních údajů, bez obchodního tajemství</div>
+        <div style="font-size:12px;color:#166534;background:#dcfce7;padding:4px 8px;border-radius:4px;">✅ Volně použitelné</div>
+        <div style="margin-top:12px;font-size:13px;color:#374151;line-height:1.5;">Marketingové texty, ceníky, blogy, anonymizované statistiky, veřejné dokumenty</div>
+      </div>
+      <div class="card" style="border-top:4px solid #60a5fa;">
+        <div style="font-size:28px;margin-bottom:8px;">🏢</div>
+        <div style="font-weight:700;font-size:16px;color:#001e17;margin-bottom:8px;">Internal</div>
+        <div style="font-size:13px;color:#6b7280;margin-bottom:12px;">Interní data bez osobních údajů</div>
+        <div style="font-size:12px;color:#92400e;background:#fef3c7;padding:4px 8px;border-radius:4px;">⚠️ S podmínkami</div>
+        <div style="margin-top:12px;font-size:13px;color:#374151;line-height:1.5;">Interní postupy, šablony, KPI bez identifikátorů, interní manuály</div>
+      </div>
+      <div class="card" style="border-top:4px solid #f97316;">
+        <div style="font-size:28px;margin-bottom:8px;">🔒</div>
+        <div style="font-weight:700;font-size:16px;color:#001e17;margin-bottom:8px;">Confidential</div>
+        <div style="font-size:13px;color:#6b7280;margin-bottom:12px;">Klientská data — čl. 4 GDPR, bez čl. 9/10</div>
+        <div style="font-size:12px;color:#92400e;background:#fef3c7;padding:4px 8px;border-radius:4px;">⚠️ Jen Enterprise + DPA</div>
+        <div style="margin-top:12px;font-size:13px;color:#374151;line-height:1.5;">Jméno, telefon, e-mail, adresa, smlouvy, příjmy, číslo účtu</div>
+      </div>
+      <div class="card" style="border-top:4px solid #ef4444;">
+        <div style="font-size:28px;margin-bottom:8px;">🚨</div>
+        <div style="font-weight:700;font-size:16px;color:#001e17;margin-bottom:8px;">Restricted</div>
+        <div style="font-size:13px;color:#6b7280;margin-bottom:12px;">Speciální zákonný režim nad rámec GDPR</div>
+        <div style="font-size:12px;color:#991b1b;background:#fee2e2;padding:4px 8px;border-radius:4px;">🚫 Extrémní opatrnost</div>
+        <div style="margin-top:12px;font-size:13px;color:#374151;line-height:1.5;">RČ, lékařské zprávy, policejní protokoly, kopie dokladů, biometrika</div>
+      </div>
+    </div>
+
+    <!-- Classification table -->
+    <div style="overflow-x:auto;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+      <table style="width:100%;min-width:680px;border-collapse:collapse;">
+        <thead>
+          <tr style="background:#001e17;color:#fff;">
+            <th style="padding:12px 16px;text-align:left;font-family:'Alegreya Sans SC',sans-serif;font-size:13px;font-weight:600;">Typ údaje</th>
+            <th style="padding:12px 16px;text-align:left;font-family:'Alegreya Sans SC',sans-serif;font-size:13px;font-weight:600;">GDPR kategorie</th>
+            <th style="padding:12px 16px;text-align:left;font-family:'Alegreya Sans SC',sans-serif;font-size:13px;font-weight:600;">Třída</th>
+            <th style="padding:12px 16px;text-align:left;font-family:'Alegreya Sans SC',sans-serif;font-size:13px;font-weight:600;">Vhodný AI režim</th>
+          </tr>
+        </thead>
+        <tbody id="classificationTable"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- REGULACE -->
+<section id="regulace" class="section-alt">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <div class="section-label mb-3">Právní kontext</div>
+      <h2 style="font-size:clamp(28px,4vw,40px);font-weight:600;color:#001e17;margin-bottom:16px;">AI Act, GDPR, CLOUD Act</h2>
+      <p style="color:#6b7280;font-size:18px;">Proč jsou verdikty takové, jaké jsou</p>
+    </div>
+    <div id="regulaceAccordions"></div>
+  </div>
+</section>
+
+<!-- SLOVNÍK -->
+<section id="slovnik">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <div class="section-label mb-3">Slovník pojmů</div>
+      <h2 style="font-size:clamp(28px,4vw,40px);font-weight:600;color:#001e17;margin-bottom:16px;">Co znamená DPA, ZDR, DPIA…?</h2>
+      <p style="color:#6b7280;font-size:18px;">Bez těchto pojmů jsou verdikty v matici nesrozumitelné</p>
+    </div>
+    <div id="glossaryList"></div>
+  </div>
+</section>
+
+<!-- CO DĚLAT -->
+<section id="co-delat" class="section-dark">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <div class="section-label mb-3" style="color:#7ad654;">Akční kroky</div>
+      <h2 style="font-size:clamp(28px,4vw,40px);font-weight:600;color:#fff;margin-bottom:16px;">Co dělat dál</h2>
+      <p style="color:rgba(255,255,255,0.7);font-size:18px;">Konkrétní kroky, ne „zvažte, přemýšlejte, poraďte se"</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="card-dark">
+        <div style="font-size:32px;margin-bottom:12px;">⚡</div>
+        <h3 style="font-family:'Alegreya Sans SC',sans-serif;font-size:20px;color:#7ad654;margin-bottom:16px;">Dnes za 5 minut</h3>
+        <div id="todaySteps"></div>
+      </div>
+      <div class="card-dark">
+        <div style="font-size:32px;margin-bottom:12px;">📅</div>
+        <h3 style="font-family:'Alegreya Sans SC',sans-serif;font-size:20px;color:#7ad654;margin-bottom:16px;">Tento měsíc</h3>
+        <div id="monthSteps"></div>
+      </div>
+      <div class="card-dark">
+        <div style="font-size:32px;margin-bottom:12px;">🎯</div>
+        <h3 style="font-family:'Alegreya Sans SC',sans-serif;font-size:20px;color:#7ad654;margin-bottom:16px;">Tento kvartál</h3>
+        <div id="quarterSteps"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="background:#001e17;color:rgba(255,255,255,0.7);padding:48px 0;">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row justify-between gap-8">
+      <div>
+        <div style="font-family:'Alegreya Sans SC',sans-serif;font-weight:700;font-size:22px;color:#fff;letter-spacing:1px;margin-bottom:8px;">ADVALO</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.5);max-width:360px;line-height:1.6;">
+          AI Licence Compass — Stav k červnu 2026<br>
+          <strong style="color:rgba(255,255,255,0.7);">Není právní radou.</strong> Slouží jako orientační pomůcka. Před nasazením AI na klientská data doporučujeme konzultaci s právníkem.
+        </div>
+      </div>
+      <div>
+        <div style="font-size:13px;font-weight:600;color:#7ad654;margin-bottom:12px;text-transform:uppercase;letter-spacing:0.5px;">Zdroje</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <a href="https://asociace.ai/eu-ai-act/" target="_blank" style="color:rgba(255,255,255,0.6);font-size:13px;text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#7ad654'" onmouseout="this.style.color='rgba(255,255,255,0.6)'">📖 AI Act průvodce — Česká asociace AI</a>
+          <a href="https://www.privacy-regulation.eu/cs/" target="_blank" style="color:rgba(255,255,255,0.6);font-size:13px;text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#7ad654'" onmouseout="this.style.color='rgba(255,255,255,0.6)'">📄 GDPR plný text česky</a>
+          <a href="https://www.zakonyprolidi.cz/" target="_blank" style="color:rgba(255,255,255,0.6);font-size:13px;text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#7ad654'" onmouseout="this.style.color='rgba(255,255,255,0.6)'">📋 Zákony pro lidi</a>
+          <a href="https://eur-lex.europa.eu/legal-content/CS/TXT/?uri=CELEX:32024R1689" target="_blank" style="color:rgba(255,255,255,0.6);font-size:13px;text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#7ad654'" onmouseout="this.style.color='rgba(255,255,255,0.6)'">🤖 AI Act plný text (EUR-Lex)</a>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:40px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.1);text-align:center;font-size:12px;color:rgba(255,255,255,0.4);">
+      © 2026 ADVALO s.r.o. · Aktualizace dat: čtvrtletně · Datum poslední aktualizace: červen 2026
+    </div>
+  </div>
+</footer>
+
+<!-- MODAL for cell details -->
+<div class="modal-overlay" id="cellModal" onclick="closeModal(event)">
+  <div class="modal-box" id="cellModalBox" onclick="event.stopPropagation()">
+    <button onclick="closeModal()" style="position:absolute;top:16px;right:16px;background:none;border:none;cursor:pointer;font-size:24px;color:#6b7280;line-height:1;">×</button>
+    <div id="cellModalContent"></div>
+  </div>
+</div>
+
+<!-- Bottom sheet for glossary on mobile -->
+<div class="bottom-sheet-overlay" id="bottomSheetOverlay" onclick="closeBottomSheet()"></div>
+<div class="bottom-sheet" id="bottomSheet">
+  <div style="width:40px;height:4px;background:#e5e7eb;border-radius:2px;margin:0 auto 20px;"></div>
+  <div id="bottomSheetContent"></div>
+</div>
+
+<!-- Tooltip -->
+<div class="tooltip" id="tooltip" style="display:none;"></div>
+
+<script>
+// =============================================================================
+// DATA
+// =============================================================================
+
+const tools = [
+  {
+    id: "chatgpt-free",
+    name: "ChatGPT Free",
+    provider: "openai",
+    licenseType: "personal",
+    priceRange: "Zdarma",
+    officialUrl: "https://chat.openai.com",
+    training: { uses: true, detail: "Defaultně zapnuto — vypněte v Settings → Data Controls → 'Improve the model'." },
+    retention: { duration: "Historie do smazání; Temporary Chat 30 dní", specialNote: "Rozsah retence z důvodu kauzy NYT v. OpenAI nelze z veřejných zdrojů přesně ověřit" },
+    dpa: { available: false, type: "Spotřebitelské podmínky — bez DPA" },
+    euHosting: { available: "no", detail: "Servery v USA" },
+    zdr: { available: "no", detail: "Nedostupné" },
+    cloudAct: { exposed: true, mitigation: "Pseudonymizace dat před odesláním" },
+    certifications: ["SOC 2 Type II"],
+    practicalTip: "Vypněte 'Improve the model' v Settings → Data Controls. Pro citlivější dotazy používejte Temporary Chats — neukládají se do historie.",
+    verdicts: {
+      public: { status: "allowed", shortNote: "Bez omezení — veřejná data neobsahují osobní údaje", whyExplanation: "Data v kategorii Public definujeme jako obsah bez osobních údajů a bez obchodního tajemství. Taková data nepodléhají GDPR ani ochraně obchodního tajemství. I kdyby ChatGPT Free na nich trénoval, nehrozí právní ani obchodní riziko. Můžete volně používat pro brainstorming, tvorbu obsahu a překlady.", legalRefs: [{ displayText: "čl. 2 GDPR — Věcná působnost (jen osobní údaje)", url: "https://eur-lex.europa.eu/legal-content/CS/TXT/?uri=CELEX:32016R0679" }, { displayText: "čl. 4 GDPR — Definice osobních údajů", url: "https://www.privacy-regulation.eu/cs/4.htm" }] },
+      internal: { status: "conditional", shortNote: "Povoleno po vypnutí trénování — jen pokud data neobsahují osobní údaje", whyExplanation: "Pokud interní data neobsahují žádné osobní údaje, GDPR se formálně neuplatní. Riziko: chaty se ukládají v historii účtu a defaultně trénují model. VŽDY vypněte 'Improve the model' v Settings → Data Controls a pro citlivější dotazy používejte Temporary Chat (30denní retence). Pokud se v interních dokumentech objeví jména nebo jiné identifikátory, spadají do kategorie Confidential.", legalRefs: [{ displayText: "OpenAI — How your data is used to improve models", url: "https://help.openai.com/en/articles/5722486-how-your-data-is-used-to-improve-model-performance" }, { displayText: "OpenAI — Chat and File Retention Policies", url: "https://help.openai.com/en/articles/8983778-chat-and-file-retention-policies-in-chatgpt" }, { displayText: "§ 504 OZ — Obchodní tajemství", url: "https://www.zakonyprolidi.cz/cs/2012-89#p504" }] },
+      confidential: { status: "forbidden", shortNote: "Neakceptovatelné — bez DPA, data trénují model, US jurisdikce", whyExplanation: "ChatGPT Free standardně ukládá chaty v historii účtu a defaultně je používá k trénování modelu. I po vypnutí trénování chybí zpracovatelská smlouva (DPA) — bez ní je použití pro klientská data z pohledu GDPR vysoce rizikové a v kontextu finančního poradenství v ČR neakceptovatelné. OpenAI jako americká firma podléhá CLOUD Act — americký soud může za podmínek trestního řízení žádat o data.", legalRefs: [{ displayText: "čl. 28 GDPR — Zpracovatel (povinnost DPA)", url: "https://www.privacy-regulation.eu/cs/28.htm" }, { displayText: "čl. 44–49 GDPR — Předávání do třetích zemí", url: "https://www.privacy-regulation.eu/cs/44.htm" }, { displayText: "CLOUD Act — Eurojust", url: "https://www.eurojust.europa.eu/publication/cloud-act" }, { displayText: "OpenAI DPA — pouze pro Enterprise/Team/API", url: "https://openai.com/policies/data-processing-addendum/" }] },
+      restricted: { status: "forbidden", shortNote: "Neakceptovatelné — čl. 9/10 GDPR vyžaduje speciální právní titul", whyExplanation: "Restricted data (RČ, lékařské zprávy, policejní protokoly) jsou chráněna speciálními zákony nad rámec GDPR. Rodné číslo má vlastní zákonný režim dle § 13c z. 133/2000 Sb. Lékařská zpráva je zvláštní kategorie (čl. 9 GDPR) — zpracování vyžaduje explicitní právní titul dle čl. 9/2. Vložení do veřejného AI bez DPA tento titul nesplňuje. Teoreticky možné jen po plné anonymizaci.", legalRefs: [{ displayText: "čl. 9 GDPR — Zvláštní kategorie osobních údajů", url: "https://www.privacy-regulation.eu/cs/9.htm" }, { displayText: "čl. 10 GDPR — Trestní údaje", url: "https://www.privacy-regulation.eu/cs/10.htm" }, { displayText: "§ 13c z. 133/2000 Sb. — Rodné číslo", url: "https://www.zakonyprolidi.cz/cs/2000-133#p13c" }, { displayText: "§ 117 z. 257/2016 Sb. — Mlčenlivost úvěrového zprostředkovatele", url: "https://www.zakonyprolidi.cz/cs/2016-257#p117" }, { displayText: "§ 38 z. 253/2008 Sb. — AML mlčenlivost", url: "https://www.zakonyprolidi.cz/cs/2008-253#p38" }] }
+    }
+  },
+  {
+    id: "chatgpt-plus",
+    name: "ChatGPT Plus / Pro",
+    provider: "openai",
+    licenseType: "personal",
+    priceRange: "$20–$200/měs",
+    officialUrl: "https://chat.openai.com",
+    training: { uses: true, detail: "Identický režim s Free — platit za Plus NEMĚNÍ datový režim." },
+    retention: { duration: "Identické s Free verzí", specialNote: "Platit za Plus neposkytuje žádnou dodatečnou ochranu dat" },
+    dpa: { available: false, type: "Spotřebitelské podmínky — bez DPA" },
+    euHosting: { available: "no", detail: "Servery v USA" },
+    zdr: { available: "no", detail: "Nedostupné" },
+    cloudAct: { exposed: true, mitigation: "Žádná mitigace v osobní verzi" },
+    certifications: ["SOC 2 Type II"],
+    practicalTip: "Častý omyl: 'Platím za Plus, takže je to bezpečné.' NENÍ. Plus dává lepší model, ale nulovou dodatečnou ochranu dat. Vypněte 'Improve the model' stejně jako u Free verze.",
+    verdicts: {
+      public: { status: "allowed", shortNote: "Bez omezení — stejný datový režim jako Free, lepší modely", whyExplanation: "Placená verze přináší lepší modely a vyšší limity, ale z hlediska ochrany dat je režim identický s Free verzí. Pro data bez osobních údajů žádné omezení.", legalRefs: [{ displayText: "čl. 4 GDPR — Definice osobních údajů", url: "https://www.privacy-regulation.eu/cs/4.htm" }] },
+      internal: { status: "conditional", shortNote: "Povoleno po vypnutí trénování — placení NEMĚNÍ datový režim", whyExplanation: "Nejčastější omyl: 'Platím za Plus, takže je to bezpečné.' Platit $20/měsíc dá lepší model, ale nulovou dodatečnou ochranu dat. ChatGPT Plus/Pro má identický datový režim jako Free verze — trénování defaultně zapnuto, ukládání chatů v historii. Po vypnutí trénování a při použití Temporary Chatu je riziko pro čistě interní data (bez osobních údajů) přijatelné.", legalRefs: [{ displayText: "OpenAI — How your data is used", url: "https://help.openai.com/en/articles/5722486-how-your-data-is-used-to-improve-model-performance" }] },
+      confidential: { status: "forbidden", shortNote: "Neakceptovatelné — placená verze NEMĚNÍ datový režim, stále chybí DPA", whyExplanation: "Bez DPA a jasného vymezení rolí správce/zpracovatel je použití ChatGPT Plus/Pro pro klientská data z pohledu GDPR a transferů do USA vysoce rizikové a v kontextu finančního poradenství v ČR neakceptovatelné. Pro klientská data potřebujete minimálně Team (s DPA), ideálně Enterprise.", legalRefs: [{ displayText: "čl. 28 GDPR — Zpracovatel (povinnost DPA)", url: "https://www.privacy-regulation.eu/cs/28.htm" }, { displayText: "OpenAI DPA — dostupné jen pro Enterprise/Team/API", url: "https://openai.com/policies/data-processing-addendum/" }] },
+      restricted: { status: "forbidden", shortNote: "Neakceptovatelné — žádná osobní verze ChatGPT není vhodná pro čl. 9/10 data", whyExplanation: "Identický režim jako u Free. Ani placená osobní verze nenabízí DPA, EU residency ani ZDR. Pro Restricted data absolutně nevhodné.", legalRefs: [{ displayText: "čl. 9 GDPR — Zvláštní kategorie", url: "https://www.privacy-regulation.eu/cs/9.htm" }, { displayText: "§ 13c z. 133/2000 Sb. — Rodné číslo", url: "https://www.zakonyprolidi.cz/cs/2000-133#p13c" }] }
+    }
+  },
+  {
+    id: "chatgpt-team",
+    name: "ChatGPT Team",
+    provider: "openai",
+    licenseType: "team",
+    priceRange: "$25–$30/uživatel/měs",
+    officialUrl: "https://openai.com/chatgpt/team",
+    training: { uses: false, detail: "Smluvně zakázáno trénovat na datech zákazníka." },
+    retention: { duration: "Konfigurovatelná", specialNote: "DPA smluvně zajišťuje nevyužívání dat k trénování" },
+    dpa: { available: true, type: "OpenAI DPA (Business Terms)" },
+    euHosting: { available: "no", detail: "Servery v USA — chybí EU data residency, nutné SCC + TIA" },
+    zdr: { available: "no", detail: "Nedostupné v Team verzi" },
+    cloudAct: { exposed: true, mitigation: "SCC + TIA (Transfer Impact Assessment) dle Schrems II" },
+    certifications: ["SOC 2 Type II"],
+    practicalTip: "Team licence je první bezpečná volba pro interní data. Pro klientská data (Confidential) je VYSOCE RIZIKOVÁ — chybí EU residency. Doporučujeme přejít na Enterprise nebo pseudonymizovat.",
+    verdicts: {
+      public: { status: "allowed", shortNote: "Povoleno — DPA, bez trénování, oddělený workspace", whyExplanation: "ChatGPT Team je první úroveň s DPA a zákazem trénování na datech. Pro data bez osobních údajů plně bezpečný. Workspace je oddělený od osobních účtů.", legalRefs: [{ displayText: "OpenAI DPA", url: "https://openai.com/policies/data-processing-addendum/" }, { displayText: "OpenAI Business Terms", url: "https://openai.com/policies/business-terms/" }] },
+      internal: { status: "allowed", shortNote: "Povoleno — DPA, bez trénování, vhodné pro týmovou práci", whyExplanation: "Team licence smluvně zakazuje trénování na vašich datech, má DPA a workspace oddělený od osobních účtů. Pro interní dokumenty, šablony a procesy plně vhodný. Retence je konfigurovatelná.", legalRefs: [{ displayText: "čl. 28 GDPR — DPA splněno ✅", url: "https://www.privacy-regulation.eu/cs/28.htm" }, { displayText: "OpenAI DPA", url: "https://openai.com/policies/data-processing-addendum/" }, { displayText: "čl. 46 GDPR — SCC (pro US transfer)", url: "https://www.privacy-regulation.eu/cs/46.htm" }] },
+      confidential: { status: "forbidden", shortNote: "Vysoce rizikové — DPA existuje, ale chybí EU residency a ZDR", whyExplanation: "ChatGPT Team má DPA a netrénuje na datech — to je lepší než osobní verze. ALE: (1) nemá EU data residency (data v US), (2) nemá ZDR, (3) nemá pokročilé bezpečnostní funkce Enterprise. Pro systematickou práci s klientskými daty vysoce rizikové. Použitelné pouze po provedení TIA (Transfer Impact Assessment) dle Schrems II a zavedení doplňkových opatření.", legalRefs: [{ displayText: "čl. 28 GDPR — DPA existuje ✅", url: "https://www.privacy-regulation.eu/cs/28.htm" }, { displayText: "čl. 44–49 GDPR — nutné SCC + TIA", url: "https://www.privacy-regulation.eu/cs/44.htm" }, { displayText: "čl. 46 GDPR — vhodné záruky", url: "https://www.privacy-regulation.eu/cs/46.htm" }, { displayText: "CLOUD Act — Eurojust", url: "https://www.eurojust.europa.eu/publication/cloud-act" }] },
+      restricted: { status: "forbidden", shortNote: "Neakceptovatelné — Team nemá dostatečné záruky pro čl. 9/10 data", whyExplanation: "Ani DPA u Team licence nestačí pro Restricted data. Lékařské zprávy, RČ a policejní protokoly vyžadují EU hosting, ZDR, DPIA a explicitní smluvní pokrytí čl. 9 zpracování. Nutné i provedení TIA.", legalRefs: [{ displayText: "čl. 9 GDPR — zvláštní kategorie, právní titul dle čl. 9/2", url: "https://www.privacy-regulation.eu/cs/9.htm" }, { displayText: "čl. 35 GDPR — DPIA povinné při rozsáhlém zpracování čl. 9 dat", url: "https://www.privacy-regulation.eu/cs/35.htm" }] }
+    }
+  },
+  {
+    id: "chatgpt-enterprise",
+    name: "ChatGPT Enterprise",
+    provider: "openai",
+    licenseType: "enterprise",
+    priceRange: "Na dotaz / custom pricing",
+    officialUrl: "https://openai.com/chatgpt/enterprise",
+    training: { uses: false, detail: "Garantováno smluvně — data se nepoužívají k trénování." },
+    retention: { duration: "Zákazník nastavuje retenci", specialNote: "Plná kontrola nad retencí dat" },
+    dpa: { available: true, type: "OpenAI Enterprise DPA" },
+    euHosting: { available: "yes", detail: "EU Data Residency dostupná — nutno aktivně zapnout" },
+    zdr: { available: "yes", detail: "Dostupné v Enterprise" },
+    cloudAct: { exposed: true, mitigation: "EU residency + šifrování snižují riziko, ale CLOUD Act nelze zcela eliminovat" },
+    certifications: ["SOC 2 Type II", "ISO 27001"],
+    practicalTip: "Enterprise je bezpečná volba pro Confidential data. NUTNÉ: (1) aktivovat EU data residency, (2) provést DPIA, (3) provést TIA dle Schrems II. Pro Restricted data (lékařské zprávy, RČ) nutná pseudonymizace PŘED odesláním.",
+    verdicts: {
+      public: { status: "allowed", shortNote: "Plně povoleno — nejvyšší úroveň ochrany u OpenAI", whyExplanation: "Enterprise licence má DPA, netrénuje, nabízí EU residency, ZDR, SSO, SCIM, audit logy a SOC 2 certifikaci. Pro Public data bez jakéhokoliv omezení.", legalRefs: [{ displayText: "OpenAI Enterprise Privacy", url: "https://openai.com/enterprise-privacy/" }, { displayText: "OpenAI EU Data Residency", url: "https://openai.com/index/introducing-data-residency-in-europe/" }] },
+      internal: { status: "allowed", shortNote: "Plně povoleno — ideální pro interní dokumenty a procesy", whyExplanation: "Enterprise je optimální volba pro interní data. Data se nepoužívají k trénování, máte plnou kontrolu nad retencí, audit logy pro compliance.", legalRefs: [{ displayText: "čl. 28 GDPR — DPA ✅", url: "https://www.privacy-regulation.eu/cs/28.htm" }, { displayText: "OpenAI Enterprise Privacy", url: "https://openai.com/enterprise-privacy/" }] },
+      confidential: { status: "conditional", shortNote: "Povoleno s podmínkami — DPA + EU residency + DPIA + TIA", whyExplanation: "Enterprise licence obsahuje DPA, data se nepoužívají k trénování, zákazník nastavuje retenci. Pro Confidential data akceptovatelné, POKUD: (1) máte aktivní DPA, (2) zapnete EU data residency, (3) provedete DPIA, (4) provedete TIA dle Schrems II. CLOUD Act představuje reziduální riziko — americký soud může za podmínek trestního řízení žádat o data, byť s procesními garancemi.", legalRefs: [{ displayText: "čl. 28 GDPR — DPA ✅", url: "https://www.privacy-regulation.eu/cs/28.htm" }, { displayText: "čl. 35 GDPR — DPIA nutno provést", url: "https://www.privacy-regulation.eu/cs/35.htm" }, { displayText: "čl. 46 GDPR — SCC jako základ transferu", url: "https://www.privacy-regulation.eu/cs/46.htm" }, { displayText: "OpenAI EU Data Residency", url: "https://openai.com/index/introducing-data-residency-in-europe/" }, { displayText: "CLOUD Act — reziduální riziko (Eurojust)", url: "https://www.eurojust.europa.eu/publication/cloud-act" }] },
+      restricted: { status: "conditional", shortNote: "Pouze po pseudonymizaci + DPIA — ani Enterprise automaticky neřeší čl. 9/10", whyExplanation: "Enterprise poskytuje nejvyšší úroveň ochrany u OpenAI (DPA, ZDR, EU residency). ALE pro Restricted data nestačí: (1) CLOUD Act — reziduální riziko, (2) čl. 9 GDPR vyžaduje explicitní právní titul dle čl. 9/2 — DPA s AI poskytovatelem to automaticky nepokrývá. Mitigace: pseudonymizace PŘED odesláním (RČ → ID_001, jméno → Klient_001) + DPIA + ZDR + TIA. I po pseudonymizaci data zůstávají osobními údaji dle GDPR.", legalRefs: [{ displayText: "čl. 9 GDPR — zvláštní kategorie, právní tituly dle čl. 9/2", url: "https://www.privacy-regulation.eu/cs/9.htm" }, { displayText: "čl. 4/5 GDPR — pseudonymizovaná data ZŮSTÁVAJÍ osobními údaji", url: "https://www.privacy-regulation.eu/cs/4.htm" }, { displayText: "čl. 35 GDPR — DPIA povinné (čl. 35/3/b)", url: "https://www.privacy-regulation.eu/cs/35.htm" }, { displayText: "§ 13c z. 133/2000 Sb. — Rodné číslo", url: "https://www.zakonyprolidi.cz/cs/2000-133#p13c" }, { displayText: "OpenAI Enterprise Privacy", url: "https://openai.com/enterprise-privacy/" }] }
+    }
+  },
+  {
+    id: "openai-api",
+    name: "OpenAI API",
+    provider: "openai",
+    licenseType: "api",
+    priceRange: "Pay-as-you-go (od ~$0.002/1K tokenů)",
+    officialUrl: "https://platform.openai.com",
+    training: { uses: false, detail: "API defaultně nepoužívá data zákazníků k trénování." },
+    retention: { duration: "30 dní pro abuse monitoring (ZDR na žádost)", specialNote: "ZDR dostupné na vyžádání pro oprávněné zákazníky" },
+    dpa: { available: true, type: "OpenAI DPA (API)" },
+    euHosting: { available: "possible", detail: "EU Data Residency dostupná" },
+    zdr: { available: "on_request", detail: "Na žádost pro oprávněné zákazníky" },
+    cloudAct: { exposed: true, mitigation: "EU residency + šifrování + ZDR" },
+    certifications: ["SOC 2 Type II", "ISO 27001"],
+    practicalTip: "API je ideální pro automatizovaný pseudonymizační pipeline (Make → pseudonymizace → API → depseudonymizace → výstup). Pro Confidential data: DPIA + TIA + EU residency. API je bezpečnější volba než chat pro automatizované zpracování.",
+    verdicts: {
+      public: { status: "allowed", shortNote: "Bez omezení — API defaultně netrénuje na datech", whyExplanation: "OpenAI API defaultně nepoužívá data zákazníků k trénování. Pro data bez osobních údajů plně bezpečné.", legalRefs: [{ displayText: "OpenAI API Data Usage Policy", url: "https://help.openai.com/en/articles/5722486-how-your-data-is-used-to-improve-model-performance" }] },
+      internal: { status: "allowed", shortNote: "Povoleno — DPA, bez trénování, 30denní retence pro monitoring", whyExplanation: "API má DPA, netrénuje defaultně, retence 30 dní pro abuse monitoring (ZDR na žádost). Vhodné pro interní automatizace a napojení na interní nástroje (Make, n8n, Cursor).", legalRefs: [{ displayText: "čl. 28 GDPR — DPA ✅", url: "https://www.privacy-regulation.eu/cs/28.htm" }, { displayText: "OpenAI DPA", url: "https://openai.com/policies/data-processing-addendum/" }] },
+      confidential: { status: "conditional", shortNote: "Povoleno s podmínkami — DPA + EU residency + DPIA + TIA", whyExplanation: "API má stejný smluvní režim jako Enterprise — DPA, bez trénování, EU residency možná, ZDR na žádost. Pro automatizované zpracování klientských dat (pseudonymizační proxy přes Make/Cursor) je API vhodná volba. Stále nutné: DPIA + TIA dle Schrems II.", legalRefs: [{ displayText: "čl. 28 GDPR — DPA ✅", url: "https://www.privacy-regulation.eu/cs/28.htm" }, { displayText: "čl. 35 GDPR — DPIA", url: "https://www.privacy-regulation.eu/cs/35.htm" }, { displayText: "čl. 46 GDPR — SCC", url: "https://www.privacy-regulation.eu/cs/46.htm" }] },
+      restricted: { status: "conditional", shortNote: "Pouze po pseudonymizaci — stejný režim jako Enterprise", whyExplanation: "API nabízí ZDR a EU residency. Pro Restricted data: pseudonymizace PŘED odesláním + DPIA + ZDR + TIA. API je ideální pro automatizovaný pseudonymizační pipeline. I po pseudonymizaci data zůstávají osobními údaji dle GDPR.", legalRefs: [{ displayText: "čl. 9 GDPR — zvláštní kategorie", url: "https://www.privacy-regulation.eu/cs/9.htm" }, { displayText: "čl. 4/5 GDPR — pseudonymizovaná data jsou stále osobní", url: "https://www.privacy-regulation.eu/cs/4.htm" }, { displayText: "čl. 35 GDPR — DPIA povinné", url: "https://www.privacy-regulation.eu/cs/35.htm" }] }
+    }
+  },
+  {
+    id: "claude-personal",
+    name: "Claude Free / Pro / Max",
+    provider: "anthropic",
+    licenseType: "personal",
+    priceRange: "Zdarma / $20–$100/měs",
+    officialUrl: "https://claude.ai",
+    training: { uses: true, detail: "Od 28. 8. 2025 změna podmínek: výchozí toggle pro trénování je ZAPNUTÝ. Pokud jste do 8. 10. 2025 nevypnuli sdílení dat, vaše konverzace trénují model s retencí až 5 let." },
+    retention: { duration: "5 let pokud opt-in; 30 dní po opt-out", specialNote: "KRITICKÉ: Změna podmínek 28. 8. 2025 — zkontrolujte nastavení" },
+    dpa: { available: false, type: "Spotřebitelské podmínky — bez DPA" },
+    euHosting: { available: "no", detail: "Servery v USA" },
+    zdr: { available: "no", detail: "Nedostupné v osobní verzi" },
+    cloudAct: { exposed: true, mitigation: "Žádná mitigace v osobní verzi" },
+    certifications: [],
+    practicalTip: "URGENTNÍ: Jděte do Settings → Privacy → 'Help improve Claude' — VYPNĚTE. Pokud jste to neudělali do 8. 10. 2025, vaše starší konverzace již trénují model po dobu 5 let.",
+    verdicts: {
+      public: { status: "allowed", shortNote: "Bez omezení — pro data bez osobních údajů", whyExplanation: "Pro data bez osobních údajů žádné omezení. Ověřte nastavení toggleu pro trénování po změně podmínek 28. 8. 2025.", legalRefs: [{ displayText: "Anthropic — Data Training Policy", url: "https://privacy.claude.com/en/articles/7996868-is-my-data-used-for-model-training" }, { displayText: "Anthropic — Data Retention", url: "https://privacy.claude.com/en/articles/10023548-how-long-do-you-store-my-data" }] },
+      internal: { status: "conditional", shortNote: "Povoleno po vypnutí trénování — OVĚŘTE nastavení po změně podmínek 28. 8. 2025", whyExplanation: "KRITICKÉ: Anthropic od 28. 8. 2025 změnil podmínky — výchozí toggle pro trénování je ZAPNUTÝ s retencí dat až 5 let. Pokud jste do 8. 10. 2025 nevypnuli sdílení dat, vaše konverzace trénují model. Pokud interní data neobsahují osobní údaje, GDPR se formálně neuplatní, ale proveďte opt-out okamžitě. Po opt-outu: retence 30 dní, riziko pro čistě neosobní interní data přijatelné.", legalRefs: [{ displayText: "Anthropic — Updates to Privacy Policy (28. 8. 2025)", url: "https://www.anthropic.com/news/updates-to-our-consumer-terms" }, { displayText: "Anthropic — Data Training Policy", url: "https://privacy.claude.com/en/articles/10023580-is-my-data-used-for-model-training" }] },
+      confidential: { status: "forbidden", shortNote: "Neakceptovatelné — bez DPA, 5letá retence při opt-in, US jurisdikce", whyExplanation: "Bez DPA a jasného vymezení rolí správce/zpracovatel je použití pro klientská data z pohledu GDPR vysoce rizikové a v kontextu finančního poradenství v ČR neakceptovatelné. Při zapnutém trénování retence až 5 let — v přímém rozporu s principem omezení uložení (čl. 5/1/e GDPR). Anthropic je americká firma (CLOUD Act).", legalRefs: [{ displayText: "čl. 28 GDPR — chybí DPA", url: "https://www.privacy-regulation.eu/cs/28.htm" }, { displayText: "čl. 5/1/e GDPR — omezení uložení (5letá retence problematická)", url: "https://www.privacy-regulation.eu/cs/5.htm" }, { displayText: "CLOUD Act — Eurojust", url: "https://www.eurojust.europa.eu/publication/cloud-act" }] },
+      restricted: { status: "forbidden", shortNote: "Neakceptovatelné — v kontextu FP v ČR zakázáno, teoreticky jen po plné anonymizaci", whyExplanation: "Vše jako u Confidential, navíc: Restricted data mají vlastní zákonný režim (čl. 9/10 GDPR, § 13c z. 133/2000 Sb.). Teoreticky možné pouze po plné anonymizaci (kdy data přestanou být osobními údaji dle recitálu 26 GDPR), ale to je v praxi obtížně dosažitelné.", legalRefs: [{ displayText: "čl. 9 GDPR — Zvláštní kategorie", url: "https://www.privacy-regulation.eu/cs/9.htm" }, { displayText: "čl. 10 GDPR — Trestní údaje", url: "https://www.privacy-regulation.eu/cs/10.htm" }, { displayText: "§ 13c z. 133/2000 Sb. — Rodné číslo", url: "https://www.zakonyprolidi.cz/cs/2000-133#p13c" }, { displayText: "Anthropic — Updates to Privacy Policy 8/2025", url: "https://www.anthropic.com/news/updates-to-our-consumer-terms" }] }
+    }
+  },
+  {
+    id: "claude-team",
+    name: "Claude Team / Enterprise",
+    provider: "anthropic",
+    licenseType: "team",
+    priceRange: "$25–Na dotaz/uživatel/měs",
+    officialUrl: "https://www.anthropic.com/claude/team",
+    training: { uses: false, detail: "Komerční verze netrénuje na datech zákazníka." },
+    retention: { duration: "Dle organizační politiky", specialNote: "Retence konfigurovatelná v rámci smlouvy" },
+    dpa: { available: true, type: "Anthropic DPA (komerční smlouva)" },
+    euHosting: { available: "no", detail: "Hosting v US — nutné SCC + TIA dle Schrems II" },
+    zdr: { available: "no", detail: "ZDR omezené — dostupné pouze u Claude Code" },
+    cloudAct: { exposed: true, mitigation: "SCC + TIA mitiguje, ale CLOUD Act nelze zcela eliminovat" },
+    certifications: ["SOC 2 Type II"],
+    practicalTip: "Pro Confidential data akceptovatelné po provedení TIA dle Schrems II. Pro Restricted data nedostatečné záruky — zvažte M365 Copilot nebo pseudonymizaci.",
+    verdicts: {
+      public: { status: "allowed", shortNote: "Bez omezení — DPA, bez trénování", whyExplanation: "Team/Enterprise verze netrénuje na datech, má DPA a oddělený workspace.", legalRefs: [{ displayText: "Anthropic — Commercial Data Training Policy", url: "https://privacy.claude.com/en/articles/7996868-is-my-data-used-for-model-training" }] },
+      internal: { status: "allowed", shortNote: "Povoleno — komerční režim, DPA, bez trénování", whyExplanation: "Data se nepoužívají k trénování, retence dle organizační politiky, DPA součástí smlouvy. Vhodné pro interní dokumenty a procesy.", legalRefs: [{ displayText: "čl. 28 GDPR — DPA ✅", url: "https://www.privacy-regulation.eu/cs/28.htm" }] },
+      confidential: { status: "allowed", shortNote: "Povoleno s DPA — vyžaduje TIA a ověření SCC", whyExplanation: "Claude Team/Enterprise má DPA, netrénuje a retence je dle organizační politiky. OMEZENÍ: (1) EU hosting není garantován — hosting v US s SCC, (2) ZDR není standardně dostupné, (3) CLOUD Act se uplatňuje. Pro Confidential data akceptovatelné po provedení TIA dle Schrems II a ověření SCC.", legalRefs: [{ displayText: "čl. 28 GDPR — DPA ✅", url: "https://www.privacy-regulation.eu/cs/28.htm" }, { displayText: "čl. 46 GDPR — SCC + TIA dle Schrems II", url: "https://www.privacy-regulation.eu/cs/46.htm" }, { displayText: "CLOUD Act — Eurojust", url: "https://www.eurojust.europa.eu/publication/cloud-act" }] },
+      restricted: { status: "forbidden", shortNote: "Vysoce rizikové — chybí EU hosting, omezené ZDR, CLOUD Act bez mitigace", whyExplanation: "Přestože Claude Team/Enterprise má DPA a netrénuje, pro Restricted data chybí klíčové záruky: (1) žádný garantovaný EU hosting, (2) ZDR omezené, (3) CLOUD Act bez dostatečné mitigace. I při pseudonymizaci zůstávají data osobními údaji dle GDPR a je nutný právní titul dle čl. 9/2 + DPIA + TIA.", legalRefs: [{ displayText: "čl. 9 GDPR — právní titul dle čl. 9/2", url: "https://www.privacy-regulation.eu/cs/9.htm" }, { displayText: "čl. 35 GDPR — DPIA povinné (čl. 35/3/b)", url: "https://www.privacy-regulation.eu/cs/35.htm" }] }
+    }
+  },
+  {
+    id: "claude-api",
+    name: "Claude API (Commercial)",
+    provider: "anthropic",
+    licenseType: "api",
+    priceRange: "Pay-as-you-go (od ~$0.003/1K tokenů)",
+    officialUrl: "https://www.anthropic.com/api",
+    training: { uses: false, detail: "Komerční API netrénuje na datech zákazníka." },
+    retention: { duration: "7 dní (od 15. 9. 2025 zkráceno z 30 na 7 dní)", specialNote: "Zkrácená retence od září 2025" },
+    dpa: { available: true, type: "Anthropic Commercial DPA" },
+    euHosting: { available: "no", detail: "Hosting v US — nutné SCC + TIA" },
+    zdr: { available: "on_request", detail: "ZDR pro kvalifikované zákazníky na žádost" },
+    cloudAct: { exposed: true, mitigation: "Krátká retence (7 dní) + ZDR snižují riziko" },
+    certifications: ["SOC 2 Type II"],
+    practicalTip: "Ideální pro automatizované pipeline s pseudonymizací. Retence jen 7 dní. Pro Confidential: pseudonymizovaná data + DPIA + TIA. Pro Restricted: extrémně vysoké riziko i s pseudonymizací — zvažte on-premise alternativy.",
+    verdicts: {
+      public: { status: "allowed", shortNote: "Bez omezení — DPA, netrénuje, retence 7 dní", whyExplanation: "Claude API v komerčním režimu netrénuje na datech, má DPA a od 15. 9. 2025 zkrácenou retenci na 7 dní. Pro data bez osobních údajů plně bezpečné.", legalRefs: [{ displayText: "Anthropic — Commercial Data Training", url: "https://privacy.claude.com/en/articles/7996868-is-my-data-used-for-model-training" }, { displayText: "Anthropic — Data Retention Policy", url: "https://privacy.claude.com/en/articles/10023548-how-long-do-you-store-my-data" }] },
+      internal: { status: "allowed", shortNote: "Povoleno — krátká retence (7 dní), DPA, bez trénování", whyExplanation: "Vhodné pro automatizované interní procesy. ZDR pro kvalifikované zákazníky na žádost. Retence pouze 7 dní od září 2025.", legalRefs: [{ displayText: "čl. 28 GDPR — DPA ✅", url: "https://www.privacy-regulation.eu/cs/28.htm" }] },
+      confidential: { status: "conditional", shortNote: "Povoleno pro pseudonymizovaná data — vyžaduje TIA a SCC", whyExplanation: "Claude API má DPA, netrénuje a má krátkou retenci (7 dní). ALE: (1) hosting v US (SCC), (2) CLOUD Act. Pseudonymizace snižuje riziko, ale pseudonymizovaná data zůstávají osobními údaji dle čl. 4/5. Nutné: TIA dle Schrems II + DPIA.", legalRefs: [{ displayText: "čl. 28 GDPR — DPA ✅", url: "https://www.privacy-regulation.eu/cs/28.htm" }, { displayText: "čl. 4/5 GDPR — pseudonymizovaná data jsou osobní", url: "https://www.privacy-regulation.eu/cs/4.htm" }, { displayText: "čl. 46 GDPR — SCC", url: "https://www.privacy-regulation.eu/cs/46.htm" }, { displayText: "CLOUD Act — Eurojust", url: "https://www.eurojust.europa.eu/publication/cloud-act" }] },
+      restricted: { status: "forbidden", shortNote: "Neakceptovatelné — chybí EU hosting, extrémní riziko i s pseudonymizací", whyExplanation: "I s ZDR a 7denní retencí chybí EU hosting a dostatečná CLOUD Act mitigace. Pro čl. 9/10 data by bylo třeba plné anonymizace + DPIA + ZDR + právní posouzení SCC — v praxi extrémně vysoké riziko.", legalRefs: [{ displayText: "čl. 9 GDPR — zvláštní kategorie", url: "https://www.privacy-regulation.eu/cs/9.htm" }, { displayText: "čl. 35 GDPR — DPIA povinné", url: "https://www.privacy-regulation.eu/cs/35.htm" }] }
+    }
+  },
+  {
+    id: "ms-copilot-personal",
+    name: "MS Copilot (osobní účet)",
+    provider: "microsoft",
+    licenseType: "personal",
+    priceRange: "Zdarma / $20/měs (Copilot Pro)",
+    officialUrl: "https://copilot.microsoft.com",
+    training: { uses: true, detail: "Bez EDP — prompty a odpovědi mohou být použity k vylepšování služeb." },
+    retention: { duration: "Dle spotřebitelských podmínek Microsoft", specialNote: "POZOR: osobní Copilot ≠ M365 Copilot — zásadně odlišné režimy" },
+    dpa: { available: false, type: "Spotřebitelské podmínky — bez DPA" },
+    euHosting: { available: "no", detail: "Bez Enterprise Data Protection" },
+    zdr: { available: "no", detail: "Nedostupné" },
+    cloudAct: { exposed: true, mitigation: "Žádná mitigace v osobní verzi" },
+    certifications: [],
+    practicalTip: "POZOR: Copilot na osobním Microsoft účtu (bez M365 + Entra ID) je v režimu osobní verze BEZ Enterprise Data Protection. Nevhodný pro jakákoliv pracovní data. Pokud používáte firemní M365, jde o JINÝ produkt — Microsoft 365 Copilot.",
+    verdicts: {
+      public: { status: "allowed", shortNote: "Bez omezení — pro obecné dotazy a data bez osobních údajů", whyExplanation: "Copilot na osobním Microsoft účtu (bez M365 + Entra ID) je v režimu osobní verze bez EDP. Pro data bez osobních údajů použitelný.", legalRefs: [{ displayText: "Microsoft Consumer Privacy Statement", url: "https://privacy.microsoft.com/cs-cz/privacystatement" }] },
+      internal: { status: "forbidden", shortNote: "Neakceptovatelné — bez EDP, nevhodný pro jakákoliv pracovní data", whyExplanation: "Copilot bez M365 a Entra ID NEMÁ Enterprise Data Protection (EDP). Prompty a odpovědi mohou být použity k vylepšování služeb, chybí DPA. Pro jakákoliv pracovní data (i neosobní) je nevhodný. POZOR: osobní Copilot ≠ Microsoft 365 Copilot s firemní licencí — jde o zásadně odlišné režimy.", legalRefs: [{ displayText: "Microsoft Copilot Privacy Docs", url: "https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-privacy" }, { displayText: "Microsoft EDP Documentation", url: "https://learn.microsoft.com/en-us/microsoft-365/copilot/enterprise-data-protection" }] },
+      confidential: { status: "forbidden", shortNote: "Neakceptovatelné — bez EDP a DPA, srovnatelné s ChatGPT Free", whyExplanation: "Bez M365 + Entra ID nemáte EDP ani DPA. Z hlediska ochrany dat srovnatelné s ChatGPT Free.", legalRefs: [{ displayText: "čl. 28 GDPR — chybí DPA", url: "https://www.privacy-regulation.eu/cs/28.htm" }, { displayText: "CLOUD Act — Eurojust", url: "https://www.eurojust.europa.eu/publication/cloud-act" }] },
+      restricted: { status: "forbidden", shortNote: "Neakceptovatelné — absolutně nevhodné pro Restricted data", whyExplanation: "Viz Confidential — všechny důvody platí. Osobní Copilot pro Restricted data absolutně nevhodný. Žádné záruky.", legalRefs: [{ displayText: "čl. 9 GDPR — zvláštní kategorie", url: "https://www.privacy-regulation.eu/cs/9.htm" }, { displayText: "§ 13c z. 133/2000 Sb. — Rodné číslo", url: "https://www.zakonyprolidi.cz/cs/2000-133#p13c" }] }
+    }
+  },
+  {
+    id: "ms-copilot-m365",
+    name: "MS 365 Copilot (firemní)",
+    provider: "microsoft",
+    licenseType: "enterprise",
+    priceRange: "$30/uživatel/měs (k M365 Business)",
+    officialUrl: "https://www.microsoft.com/cs-cz/microsoft-365/copilot",
+    training: { uses: false, detail: "Enterprise Data Protection (EDP) — data se nepoužívají k trénování a zůstávají v M365 service boundary." },
+    retention: { duration: "Dle nastavení tenantu + sensitivity labels", specialNote: "Data v M365 service boundary, respektují sensitivity labels (Purview)" },
+    dpa: { available: true, type: "Microsoft DPA + EU Data Boundary" },
+    euHosting: { available: "yes", detail: "EU Data Boundary — data fyzicky v EU (s výjimkou části telemetrie)" },
+    zdr: { available: "yes", detail: "N/A — data v M365 service boundary" },
+    cloudAct: { exposed: true, mitigation: "EU Data Boundary + sensitivity labels + šifrování výrazně snižují riziko; reziduální CLOUD Act nelze zcela eliminovat" },
+    certifications: ["SOC 2 Type II", "ISO 27001", "ISO 27018", "EU Cloud CoC", "C5"],
+    practicalTip: "Nastavte sensitivity labels v Microsoft Purview pro automatickou klasifikaci dokumentů. Copilot respektuje Purview labels — dokument označený jako Restricted nebude zahrnut do odpovědí pro uživatele bez oprávnění. POZOR: vyžaduje nastavení Purview a správné přiřazení labelů.",
+    verdicts: {
+      public: { status: "allowed", shortNote: "Plně povoleno — EDP, DPA, EU Data Boundary, nejvyšší záruky", whyExplanation: "Nejvyšší úroveň ochrany mezi porovnávanými nástroji. EDP, DPA, EU Data Boundary, Purview integrace. Poznámka: část telemetrických dat může procházet mimo EU, ale v souladu s EU Data Boundary commitments.", legalRefs: [{ displayText: "Microsoft EU Data Boundary", url: "https://www.microsoft.com/en-us/trust-center/privacy/european-data-boundary-eudb" }, { displayText: "Microsoft 365 Copilot Privacy", url: "https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-privacy" }] },
+      internal: { status: "allowed", shortNote: "Plně povoleno — data v M365 service boundary, EDP aktivní", whyExplanation: "Data zůstávají v M365 service boundary, nepoužívají se k trénování. Copilot respektuje stávající oprávnění v M365. Ideální pro interní firemní použití.", legalRefs: [{ displayText: "čl. 28 GDPR — DPA ✅", url: "https://www.privacy-regulation.eu/cs/28.htm" }, { displayText: "Microsoft EDP Documentation", url: "https://learn.microsoft.com/en-us/microsoft-365/copilot/enterprise-data-protection" }] },
+      confidential: { status: "allowed", shortNote: "Povoleno — EDP + DPA + EU Data Boundary + sensitivity labels", whyExplanation: "Pro Confidential data nejvhodnější z porovnávaných nástrojů: EDP, DPA, EU Data Boundary, sensitivity labels v Purview. CLOUD Act představuje reziduální riziko (Microsoft = US firma), ale EU Data Boundary + sensitivity labels ho výrazně mitigují.", legalRefs: [{ displayText: "čl. 28 GDPR — DPA ✅", url: "https://www.privacy-regulation.eu/cs/28.htm" }, { displayText: "čl. 35 GDPR — DPIA doporučené", url: "https://www.privacy-regulation.eu/cs/35.htm" }, { displayText: "Microsoft EU Data Boundary", url: "https://www.microsoft.com/en-us/trust-center/privacy/european-data-boundary-eudb" }, { displayText: "Microsoft 365 Copilot Privacy", url: "https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-privacy" }] },
+      restricted: { status: "conditional", shortNote: "Jediný nástroj s granulární kontrolou (Purview) — vyžaduje pokročilé nastavení a DPIA", whyExplanation: "M365 Copilot jako jediný nabízí sensitivity labels (Purview) pro automatickou kontrolu přístupu. ALE: (1) Purview neřeší právní titul dle čl. 9/2 — ten musíte mít nezávisle, (2) CLOUD Act se stále uplatňuje, (3) pro čl. 9/10 data nutná pseudonymizace + DPIA + TIA. Purview je silný technický kontrolní mechanismus, ale nenahrazuje právní základ.", legalRefs: [{ displayText: "čl. 9 GDPR — právní titul dle čl. 9/2", url: "https://www.privacy-regulation.eu/cs/9.htm" }, { displayText: "čl. 4/5 GDPR — pseudonymizace: data zůstávají osobními", url: "https://www.privacy-regulation.eu/cs/4.htm" }, { displayText: "čl. 35 GDPR — DPIA povinné (čl. 35/3/b)", url: "https://www.privacy-regulation.eu/cs/35.htm" }, { displayText: "Microsoft EU Data Boundary", url: "https://www.microsoft.com/en-us/trust-center/privacy/european-data-boundary-eudb" }, { displayText: "CLOUD Act — reziduální riziko (Eurojust)", url: "https://www.eurojust.europa.eu/publication/cloud-act" }] }
+    }
+  },
+  {
+    id: "gemini-personal",
+    name: "Gemini (osobní / free)",
+    provider: "google",
+    licenseType: "personal",
+    priceRange: "Zdarma / $20/měs (Gemini Advanced)",
+    officialUrl: "https://gemini.google.com",
+    training: { uses: true, detail: "Konverzace v Gemini Apps Activity — nastavitelné na 3, 18 nebo 36 měsíců. Recenzované konverzace mohou být uchovávány až 3 roky." },
+    retention: { duration: "Až 3 roky u recenzovaných konverzací", specialNote: "Lidská revize konverzací — zaměstnanec Googlu může číst vaše konverzace" },
+    dpa: { available: false, type: "Spotřebitelské podmínky — bez DPA" },
+    euHosting: { available: "no", detail: "Osobní Gemini bez záruky EU residency" },
+    zdr: { available: "no", detail: "Nedostupné v osobní verzi" },
+    cloudAct: { exposed: true, mitigation: "Žádná mitigace" },
+    certifications: [],
+    practicalTip: "Osobní Gemini je pro pracovní data NEVHODNÝ. Klíčové riziko: lidská revize konverzací — zaměstnanec Googlu v USA může číst vaše konverzace. Pro pracovní data používejte výhradně Gemini for Google Workspace s firemní licencí.",
+    verdicts: {
+      public: { status: "allowed", shortNote: "Bez omezení — pro data bez osobních údajů", whyExplanation: "Gemini na osobním účtu je vhodný pro obecné dotazy a data bez osobních údajů. Pozor: defaultně uchovává konverzace v Gemini Apps Activity — nastavitelné na 3, 18 nebo 36 měsíců. Recenzované konverzace mohou být uchovávány až 3 roky.", legalRefs: [{ displayText: "Gemini Apps Privacy Hub", url: "https://knowledge.workspace.google.com/admin/gemini/generative-ai-in-google-workspace-privacy-hub" }] },
+      internal: { status: "forbidden", shortNote: "Neakceptovatelné — retence až 3 roky, lidská revize, bez DPA", whyExplanation: "Gemini na osobním účtu: data v Gemini Apps Activity se uchovávají až 18 měsíců (nastavitelné), recenzované konverzace až 3 roky, a mohou být revidovány lidskými recenzenty. Bez DPA. Pro jakákoliv pracovní data nevhodný.", legalRefs: [{ displayText: "Gemini Apps Privacy Hub — retence a lidská revize", url: "https://knowledge.workspace.google.com/admin/gemini/generative-ai-in-google-workspace-privacy-hub" }] },
+      confidential: { status: "forbidden", shortNote: "Neakceptovatelné — lidská revize konverzací, bez DPA, US jurisdikce", whyExplanation: "Osobní Gemini může konverzace předložit lidským recenzentům — klientská data by mohla být čtena zaměstnanci Googlu. V kombinaci s retencí až 3 roky, absencí DPA a CLOUD Act je pro klientská data absolutně neakceptovatelné.", legalRefs: [{ displayText: "čl. 28 GDPR — chybí DPA", url: "https://www.privacy-regulation.eu/cs/28.htm" }, { displayText: "CLOUD Act — Eurojust", url: "https://www.eurojust.europa.eu/publication/cloud-act" }] },
+      restricted: { status: "forbidden", shortNote: "Neakceptovatelné — lidská revize = zaměstnanec Googlu čte data klienta", whyExplanation: "Lidská revize konverzací u osobní Gemini by znamenala, že zaměstnanec Googlu v USA čte lékařskou zprávu nebo RČ vašeho klienta. V kontextu finančního poradenství v ČR absolutně nepřijatelné.", legalRefs: [{ displayText: "čl. 9 GDPR — zvláštní kategorie", url: "https://www.privacy-regulation.eu/cs/9.htm" }, { displayText: "§ 13c z. 133/2000 Sb. — Rodné číslo", url: "https://www.zakonyprolidi.cz/cs/2000-133#p13c" }, { displayText: "Gemini Apps Privacy Hub", url: "https://knowledge.workspace.google.com/admin/gemini/generative-ai-in-google-workspace-privacy-hub" }] }
+    }
+  },
+  {
+    id: "gemini-workspace",
+    name: "Gemini for Google Workspace",
+    provider: "google",
+    licenseType: "enterprise",
+    priceRange: "Součást Workspace Business Plus / Enterprise",
+    officialUrl: "https://workspace.google.com/products/gemini/",
+    training: { uses: false, detail: "Cloud DPA (CDPA) — netrénuje na datech zákazníka. Data jsou 'core service'." },
+    retention: { duration: "Dle Workspace správce tenantu", specialNote: "Zpracování v režimu core service — stejná ochrana jako Gmail nebo Google Docs" },
+    dpa: { available: true, type: "Google Cloud DPA (CDPA)" },
+    euHosting: { available: "yes", detail: "EU residency dostupná (europe-west regiony)" },
+    zdr: { available: "no", detail: "N/A — ochrana na úrovni CDPA" },
+    cloudAct: { exposed: true, mitigation: "EU residency + CDPA výrazně snižují riziko; reziduální CLOUD Act" },
+    certifications: ["SOC 2 Type II", "ISO 27001", "ISO 27018", "ISO 42001"],
+    practicalTip: "Ověřte, že vaše Workspace edice má enterprise-grade data protection. Zapněte EU residency (europe-west region). Pro Confidential data: CDPA + EU residency + DPIA + TIA dle Schrems II. Pro Restricted: v porovnání s M365 Copilot méně vhodné (chybí granulární Purview labels).",
+    verdicts: {
+      public: { status: "allowed", shortNote: "Plně povoleno — enterprise režim, CDPA, bez trénování", whyExplanation: "Gemini for Workspace má Cloud DPA (CDPA), netrénuje na datech zákazníka, data jsou 'core service' s ISO 27001/27018/42001 certifikacemi.", legalRefs: [{ displayText: "Google Cloud DPA (CDPA)", url: "https://cloud.google.com/terms/data-processing-addendum" }, { displayText: "Gemini/Workspace Privacy Hub", url: "https://knowledge.workspace.google.com/admin/gemini/generative-ai-in-google-workspace-privacy-hub" }] },
+      internal: { status: "allowed", shortNote: "Povoleno — data pod CDPA, EU residency dostupná", whyExplanation: "Zpracování v režimu core service — stejná ochrana jako Gmail nebo Google Docs. CDPA, ISO 27001/27018/42001. EU residency dostupná (europe-west regiony).", legalRefs: [{ displayText: "čl. 28 GDPR — CDPA ✅", url: "https://www.privacy-regulation.eu/cs/28.htm" }, { displayText: "Google Cloud Data Governance", url: "https://cloud.google.com/gemini/docs/discover/data-governance" }] },
+      confidential: { status: "allowed", shortNote: "Povoleno s EU residency — vyžaduje TIA a ověření edice Workspace", whyExplanation: "Gemini for Workspace je pro Confidential data akceptovatelný: CDPA, bez trénování, EU residency (europe-west regiony). ALE: (1) Google = US firma → CLOUD Act (reziduální riziko), (2) ověřte, že vaše Workspace edice má enterprise-grade data protection. Doporučení: EU residency + DPIA + TIA dle Schrems II.", legalRefs: [{ displayText: "čl. 28 GDPR — CDPA ✅", url: "https://www.privacy-regulation.eu/cs/28.htm" }, { displayText: "čl. 35 GDPR — DPIA doporučené", url: "https://www.privacy-regulation.eu/cs/35.htm" }, { displayText: "čl. 46 GDPR — SCC", url: "https://www.privacy-regulation.eu/cs/46.htm" }, { displayText: "Google Workspace Privacy Hub", url: "https://knowledge.workspace.google.com/admin/gemini/generative-ai-in-google-workspace-privacy-hub" }] },
+      restricted: { status: "forbidden", shortNote: "Vysoce rizikové — chybí granulární kontrola typu Purview, CLOUD Act", whyExplanation: "Gemini for Workspace má silné záruky (CDPA, EU residency, bez trénování), ale pro Restricted data chybí: (1) granulární sensitivity labels jako Purview v M365, (2) CLOUD Act se uplatňuje. Teoreticky použitelné s přísnou pseudonymizací + DPIA + TIA, ale v porovnání s M365 Copilot méně vhodné.", legalRefs: [{ displayText: "čl. 9 GDPR — zvláštní kategorie", url: "https://www.privacy-regulation.eu/cs/9.htm" }, { displayText: "čl. 4/5 GDPR — pseudonymizace: data zůstávají osobními", url: "https://www.privacy-regulation.eu/cs/4.htm" }, { displayText: "čl. 35 GDPR — DPIA povinné", url: "https://www.privacy-regulation.eu/cs/35.htm" }, { displayText: "CLOUD Act — Eurojust", url: "https://www.eurojust.europa.eu/publication/cloud-act" }] }
+    }
+  }
+];
+
+const classificationData = [
+  { type: "Jméno a příjmení", gdpr: "čl. 4 (osobní údaj)", classLabel: "Confidential", regime: "Smluvní titul, AML", aiMode: "Jen Enterprise / DPA", classColor: "#f97316" },
+  { type: "Telefon, e-mail, adresa", gdpr: "čl. 4 (osobní údaj)", classLabel: "Confidential", regime: "čl. 6/1/b nebo f GDPR", aiMode: "Jen Enterprise / DPA", classColor: "#f97316" },
+  { type: "Rodné číslo", gdpr: "čl. 4 + zvláštní český režim", classLabel: "Restricted", regime: "§ 13c z. 133/2000 Sb.", aiMode: "NIKDY bez pseudonymizace", classColor: "#ef4444" },
+  { type: "Číslo OP / pasu", gdpr: "čl. 4 (identifikační doklad)", classLabel: "Restricted", regime: "AML § 8", aiMode: "Jen Enterprise + DPA + ZDR; nedoporučuje se", classColor: "#ef4444" },
+  { type: "Smlouva o pojištění", gdpr: "čl. 4 (osobní údaj)", classLabel: "Confidential", regime: "Z. 170/2018 Sb. § 80 — 10 let", aiMode: "Jen Enterprise / DPA, ideálně pseudonymizováno", classColor: "#f97316" },
+  { type: "Smlouva o spotřebitelském úvěru", gdpr: "čl. 4 (osobní údaj)", classLabel: "Confidential", regime: "Z. 257/2016 Sb. § 78 — min. 5 let", aiMode: "Jen Enterprise / DPA", classColor: "#f97316" },
+  { type: "Údaje o příjmech / majetku", gdpr: "čl. 4 (citlivé osobní údaje)", classLabel: "Confidential", regime: "Smluvní + AML", aiMode: "Jen Enterprise / DPA", classColor: "#f97316" },
+  { type: "Číslo bankovního účtu", gdpr: "čl. 4 (osobní údaj)", classLabel: "Confidential", regime: "čl. 6/1/b + AML", aiMode: "Jen Enterprise / DPA, prefer pseudonymizace", classColor: "#f97316" },
+  { type: "Lékařská zpráva", gdpr: "čl. 9 (zdravotní údaj)", classLabel: "Restricted", regime: "Souhlas čl. 9/2/a + zákon o zdrav. službách", aiMode: "NIKDY do běžných AI; jen on-premise + DPIA", classColor: "#ef4444" },
+  { type: "Policejní protokol / výpis RT", gdpr: "čl. 10 (trestní údaj)", classLabel: "Restricted", regime: "Jen pod dozorem orgánu veřejné moci", aiMode: "NIKDY do AI", classColor: "#ef4444" },
+  { type: "Biometrika (foto pro KYC)", gdpr: "čl. 9 (pokud k identifikaci)", classLabel: "Restricted", regime: "Souhlas + DPIA", aiMode: "NIKDY do běžných AI bez DPIA", classColor: "#ef4444" }
+];
+
+const glossary = [
+  { id: "dpa", term: "DPA — Data Processing Agreement", shortDef: "Zpracovatelská smlouva mezi vámi a poskytovatelem AI — zákonný požadavek GDPR.", longDef: "Podle čl. 28 GDPR musíte mít písemnou smlouvu s každým, komu svěřujete zpracování osobních údajů. Consumer verze AI nástrojů DPA nenabízí — fungují na spotřebitelských podmínkách. Bez DPA nesmíte do nástroje vkládat žádná data, která identifikují konkrétní osobu. Enterprise/Team licence DPA typicky obsahují.", refs: [{ text: "čl. 28 GDPR — Zpracovatel", url: "https://www.privacy-regulation.eu/cs/28.htm" }] },
+  { id: "zdr", term: "ZDR — Zero Data Retention", shortDef: "Režim, kdy poskytovatel AI neuchovává žádná vaše data po zpracování požadavku.", longDef: "Standardně si AI nástroje uchovávají vaše prompty a odpovědi minimálně 30 dní (pro detekci zneužití). ZDR tento monitoring vypíná — požadavek se zpracuje a okamžitě smaže. Dostupné typicky jen u Enterprise/API licencí na žádost. Pro Restricted data je ZDR silně doporučený.", refs: [] },
+  { id: "dpia", term: "DPIA — Data Protection Impact Assessment", shortDef: "Povinné posouzení vlivu na ochranu osobních údajů před nasazením AI na klientská data.", longDef: "Čl. 35 GDPR vyžaduje DPIA, pokud zpracování 'pravděpodobně představuje vysoké riziko pro práva a svobody' — což zpracování klientských dat v AI nástroji typicky je. DPIA popisuje: jaká data, proč, jaká rizika, jaká opatření. Pro AI v credit scoringu navíc AI Act vyžaduje FRIA (čl. 27).", refs: [{ text: "čl. 35 GDPR — DPIA", url: "https://www.privacy-regulation.eu/cs/35.htm" }] },
+  { id: "fria", term: "FRIA — Fundamental Rights Impact Assessment", shortDef: "Posouzení dopadů na základní práva — povinné pro deployery vysoce rizikových AI systémů.", longDef: "AI Act čl. 27 vyžaduje FRIA u veřejného sektoru a u AI pro hodnocení úvěruschopnosti (Annex III bod 5(b)). Pro finančního poradce relevantní, pokud používáte AI k automatickému posuzování klientů.", refs: [{ text: "čl. 27 AI Act — FRIA", url: "https://eur-lex.europa.eu/legal-content/CS/TXT/?uri=CELEX:32024R1689" }] },
+  { id: "edp", term: "EDP — Enterprise Data Protection", shortDef: "Režim ochrany dat u Microsoft 365 Copilot — prompty a odpovědi nejsou použity k trénování.", longDef: "EDP platí automaticky, pokud máte M365 licenci a přihlašujete se přes Entra ID (firemní účet). Bez toho (osobní Microsoft účet) nemáte EDP a Copilot je v osobním režimu — nevhodný pro pracovní data.", refs: [{ text: "Microsoft EDP Documentation", url: "https://learn.microsoft.com/en-us/microsoft-365/copilot/enterprise-data-protection" }] },
+  { id: "optout", term: "Opt-out (z trénování)", shortDef: "Možnost vypnout používání vašich konverzací k trénování AI modelu.", longDef: "U osobních verzí (ChatGPT Free/Plus, Claude Free/Pro) je trénování na vašich datech defaultně ZAPNUTÉ. Musíte aktivně zajít do nastavení a vypnout. Pozor: i po opt-outu si poskytovatel typicky uchovává data 30 dní pro bezpečnostní monitoring. Opt-out ≠ DPA — stále nemáte zpracovatelskou smlouvu.", refs: [] },
+  { id: "eu-data-residency", term: "EU Data Residency", shortDef: "Záruka, že vaše data fyzicky zůstanou na serverech v EU.", longDef: "Důležité pro GDPR compliance, ale POZOR: neřeší CLOUD Act. I data fyzicky v EU může americký soud přikázat vydat, pokud je poskytovatel americká firma. EU Data Residency je nutná podmínka, ale ne dostatečná.", refs: [] },
+  { id: "cloud-act", term: "CLOUD Act", shortDef: "Americký zákon (2018), který umožňuje US orgánům přistupovat k datům amerických firem kdekoliv na světě.", longDef: "OpenAI, Anthropic, Google, Microsoft — všichni jsou US firmy. I když data uložíte v EU datacentru, americký soud může za podmínek trestního řízení přikázat jejich vydání. Proto pro nejcitlivější data (lékařské zprávy, RČ) ani Enterprise licence amerických poskytovatelů neposkytuje 100% záruku. Mitigace: pseudonymizace před odesláním.", refs: [{ text: "CLOUD Act — Eurojust analýza", url: "https://www.eurojust.europa.eu/publication/cloud-act" }] },
+  { id: "pseudonymizace", term: "Pseudonymizace", shortDef: "Nahrazení identifikátorů (jméno, RČ) interními kódy (Klient_001) — data zůstávají osobními, ale riziko při úniku je nižší.", longDef: "Čl. 4 odst. 5 GDPR: pseudonymizovaná data jsou stále osobní údaje (na rozdíl od anonymizace). GDPR je však považuje za silné bezpečnostní opatření. V praxi: před odesláním do AI API nahradíte jméno → Klient_001, RČ → ID_001. Po odpovědi dosadíte zpět. Lze automatizovat (Make/Cursor skript).", refs: [{ text: "čl. 4/5 GDPR — Pseudonymizace", url: "https://www.privacy-regulation.eu/cs/4.htm" }] },
+  { id: "deployer", term: "Deployer (zavádějící subjekt)", shortDef: "Firma, která AI používá (ne vyvíjí). ADVALO = deployer.", longDef: "AI Act rozlišuje poskytovatele (kdo AI vyvinul — OpenAI, Google…) a deployery (kdo ji nasazuje — vy). Jako deployer máte povinnosti podle čl. 26 AI Act: lidský dohled, logy, informování klientů. Povinnosti se uplatní JEN pro high-risk AI systémy dle čl. 6 + Annex III.", refs: [{ text: "čl. 26 AI Act — Povinnosti deployerů", url: "https://eur-lex.europa.eu/legal-content/CS/TXT/?uri=CELEX:32024R1689" }] },
+  { id: "sensitivity-labels", term: "Sensitivity Labels (Microsoft Purview)", shortDef: "Štítky přiřazené dokumentům v M365, které automaticky řídí přístup a to, zda je Copilot zahrne do odpovědí.", longDef: "Pokud dokument označíte jako 'Restricted' v Purview, Copilot ho nezahrne do odpovědí pro uživatele bez oprávnění. Silný nástroj pro granulární kontrolu — ale vyžaduje nastavení Purview, což je práce navíc.", refs: [] }
+];
+
+const wizardDataTypes = {
+  public: { label: "Veřejná data", icon: "🌐", desc: "Marketingové texty, ceníky, anonymizovaný obsah", steps: null },
+  internal: {
+    label: "Interní firemní data", icon: "🏢", desc: "Postupy, šablony, KPI",
+    steps: [
+      { id: "internal-general", label: "Obecné interní", desc: "Postupy, šablony, manuály bez osobních dat" },
+      { id: "internal-hr", label: "HR / personální", desc: "Mzdy, hodnocení (pozor: osobní údaje zaměstnanců = Confidential)" },
+      { id: "internal-strategy", label: "Strategie / KPI", desc: "Obchodní plány, reporty bez osobních identifikátorů" }
+    ]
+  },
+  confidential: {
+    label: "Klientská běžná data", icon: "🔒", desc: "Smlouvy, příjmy, kontakty",
+    steps: [
+      { id: "conf-contacts", label: "Jména a kontakty", desc: "Jméno, telefon, e-mail, adresa klienta" },
+      { id: "conf-contracts", label: "Smlouvy", desc: "Pojistné smlouvy, úvěrové smlouvy" },
+      { id: "conf-income", label: "Příjmy a majetek", desc: "Výše příjmů, hodnota majetku, finanční situace" },
+      { id: "conf-accounts", label: "Čísla účtů", desc: "Bankovní čísla účtů, IBAN" }
+    ]
+  },
+  restricted: {
+    label: "Klientská citlivá data", icon: "🚨", desc: "RČ, lékařské zprávy, doklady",
+    steps: [
+      { id: "restr-rc", label: "Rodné číslo", desc: "RČ má speciální zákonný režim dle § 13c z. 133/2000 Sb." },
+      { id: "restr-medical", label: "Lékařská zpráva", desc: "Zdravotní data — čl. 9 GDPR (zvláštní kategorie)" },
+      { id: "restr-document", label: "Kopie dokladů", desc: "Kopie OP, pasu, řidičského průkazu" },
+      { id: "restr-criminal", label: "Policejní protokol", desc: "Výpis z RT, policejní protokoly — čl. 10 GDPR" }
+    ]
+  }
+};
+
+// Current wizard state
+let wizardState = { type: null, detail: null, step: 1 };
+
+// =============================================================================
+// RENDER FUNCTIONS
+// =============================================================================
+
+function getStatusClass(status) {
+  if (status === 'allowed') return 'verdict-allowed';
+  if (status === 'conditional') return 'verdict-conditional';
+  return 'verdict-forbidden';
+}
+
+function getStatusEmoji(status) {
+  if (status === 'allowed') return '✅';
+  if (status === 'conditional') return '⚠️';
+  return '🚫';
+}
+
+function getStatusLabel(status) {
+  if (status === 'allowed') return 'Povoleno';
+  if (status === 'conditional') return 'S podmínkami';
+  return 'Neakceptovatelné';
+}
+
+function getProviderClass(provider) {
+  return `provider-${provider}`;
+}
+
+function getProviderLabel(provider) {
+  const labels = { openai: 'OpenAI', anthropic: 'Anthropic', google: 'Google', microsoft: 'Microsoft' };
+  return labels[provider] || provider;
+}
+
+function getProviderIcon(provider) {
+  const icons = { openai: '⚡', anthropic: '🔷', google: '🌈', microsoft: '🪟' };
+  return icons[provider] || '🤖';
+}
+
+function renderMatrix() {
+  const body = document.getElementById('matrixBody');
+  const cards = document.getElementById('matrixCards');
+  
+  const provider = document.getElementById('filterProvider').value;
+  const license = document.getElementById('filterLicense').value;
+  const safe = document.getElementById('filterSafe').value;
+  
+  let filtered = tools.filter(t => {
+    if (provider && t.provider !== provider) return false;
+    if (license && t.licenseType !== license) return false;
+    if (safe === 'yes' && t.verdicts.confidential.status === 'forbidden') return false;
+    if (safe === 'no' && t.verdicts.confidential.status !== 'forbidden') return false;
+    return true;
+  });
+  
+  // Desktop table
+  body.innerHTML = filtered.map(tool => `
+    <tr data-tool="${tool.id}">
+      <td>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="tool-icon tool-icon-${tool.provider}">${getProviderIcon(tool.provider)}</div>
+          <div>
+            <div style="font-weight:700;font-size:13px;">${tool.name}</div>
+            <span class="provider-badge ${getProviderClass(tool.provider)}">${getProviderLabel(tool.provider)}</span>
+          </div>
+        </div>
+      </td>
+      ${['public','internal','confidential','restricted'].map(cat => `
+        <td style="text-align:center;">
+          <div class="cell-verdict ${getStatusClass(tool.verdicts[cat].status)}" onclick="openCellModal('${tool.id}','${cat}')">
+            ${getStatusEmoji(tool.verdicts[cat].status)} ${getStatusLabel(tool.verdicts[cat].status)}
+          </div>
+        </td>
+      `).join('')}
+      <td style="text-align:center;">
+        ${tool.dpa.available 
+          ? '<span style="font-size:18px;" title="DPA k dispozici">✅</span>' 
+          : '<span style="font-size:18px;" title="Bez DPA">❌</span>'}
+      </td>
+    </tr>
+  `).join('');
+  
+  // Mobile cards
+  cards.innerHTML = filtered.map(tool => `
+    <div class="card" style="margin-bottom:16px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <div class="tool-icon tool-icon-${tool.provider}">${getProviderIcon(tool.provider)}</div>
+        <div>
+          <div style="font-weight:700;font-size:16px;">${tool.name}</div>
+          <span class="provider-badge ${getProviderClass(tool.provider)}">${getProviderLabel(tool.provider)}</span>
+          <span style="font-size:12px;color:#6b7280;margin-left:4px;">${tool.priceRange}</span>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-2">
+        ${['public','internal','confidential','restricted'].map(cat => {
+          const labels = { public: '🌐 Public', internal: '🏢 Internal', confidential: '🔒 Confidential', restricted: '🚨 Restricted' };
+          return `
+            <div class="cell-verdict ${getStatusClass(tool.verdicts[cat].status)}" onclick="openCellModal('${tool.id}','${cat}')" style="flex-direction:column;align-items:flex-start;gap:2px;padding:8px 10px;font-size:11px;">
+              <div style="font-weight:700;">${labels[cat]}</div>
+              <div>${getStatusEmoji(tool.verdicts[cat].status)} ${getStatusLabel(tool.verdicts[cat].status)}</div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderClassification() {
+  const tbody = document.getElementById('classificationTable');
+  tbody.innerHTML = classificationData.map((row, i) => `
+    <tr style="background:${i % 2 === 0 ? '#fff' : '#f9fafb'};">
+      <td style="padding:10px 16px;font-size:14px;font-weight:500;border-bottom:1px solid #f0f0f0;">${row.type}</td>
+      <td style="padding:10px 16px;font-size:13px;color:#6b7280;border-bottom:1px solid #f0f0f0;">${row.gdpr}</td>
+      <td style="padding:10px 16px;border-bottom:1px solid #f0f0f0;">
+        <span style="background:${row.classColor}22;color:${row.classColor};padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700;border:1px solid ${row.classColor}44;">${row.classLabel}</span>
+      </td>
+      <td style="padding:10px 16px;font-size:13px;border-bottom:1px solid #f0f0f0;">${row.aiMode}</td>
+    </tr>
+  `).join('');
+}
+
+function renderGlossary() {
+  const container = document.getElementById('glossaryList');
+  container.innerHTML = glossary.map(term => `
+    <div id="glossar-${term.id}" style="border:1px solid #def6cb;border-radius:10px;margin-bottom:12px;overflow:hidden;">
+      <button class="accordion-btn" onclick="toggleAccordion(this)" style="padding:16px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="background:#7ad654;color:#001e17;font-size:11px;font-weight:700;padding:3px 8px;border-radius:4px;text-transform:uppercase;">${term.id.toUpperCase()}</span>
+          <span style="font-size:16px;font-weight:600;">${term.term}</span>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#7ad654" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="accordion-content" style="padding:0 20px;">
+        <div style="padding-bottom:16px;">
+          <p style="font-size:15px;color:#374151;margin-bottom:8px;font-weight:500;">${term.shortDef}</p>
+          <p style="font-size:14px;color:#6b7280;line-height:1.7;margin-bottom:12px;">${term.longDef}</p>
+          ${term.refs.length ? `<div style="display:flex;flex-wrap:wrap;gap:8px;">${term.refs.map(r => `<a href="${r.url}" target="_blank" class="legal-link">${r.text} ↗</a>`).join('')}</div>` : ''}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderRegulace() {
+  const container = document.getElementById('regulaceAccordions');
+  const panels = [
+    {
+      title: "1. AI Act: Co už platí a co přijde",
+      icon: "🤖",
+      summary: "AI Act vstoupil v platnost 1. 8. 2024. Čl. 4 (AI gramotnost) a čl. 5 (zakázané praktiky) platí od 2. 2. 2025.",
+      content: `
+        <div style="margin-bottom:20px;">
+          <div style="background:#fef3c7;border:1px solid #fcd34d;border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:14px;color:#92400e;font-weight:600;">
+            ⚠️ Čl. 4 AI gramotnost platí OD ÚNORA 2025 — jste v souladu?
+          </div>
+          <h4 style="font-weight:700;margin-bottom:12px;color:#001e17;">Klíčové milníky</h4>
+          <div class="timeline-item"><div class="timeline-dot past"></div><div><strong>1. 8. 2024</strong> — Vstup AI Act v platnost</div></div>
+          <div class="timeline-item"><div class="timeline-dot past"></div><div><strong style="color:#ef4444;">2. 2. 2025 — UŽ PLATÍ</strong> — Zakázané praktiky (čl. 5) + AI gramotnost (čl. 4)</div></div>
+          <div class="timeline-item"><div class="timeline-dot past"></div><div><strong>2. 8. 2025</strong> — Pravidla pro GPAI modely</div></div>
+          <div class="timeline-item"><div class="timeline-dot future"></div><div><strong>2. 8. 2026</strong> — Vysoce rizikové systémy (čl. 6–27), transparence (čl. 50), sankce</div></div>
+          <div class="timeline-item"><div class="timeline-dot future"></div><div><strong>2. 8. 2027</strong> — Vysoce rizikové AI v regulovaných produktech (Annex I)</div></div>
+        </div>
+        <div style="background:#f2fbec;border-radius:8px;padding:16px;margin-bottom:16px;">
+          <h4 style="font-weight:700;margin-bottom:10px;color:#001e17;">Povinnosti deployera (čl. 26) — JEN pro high-risk AI</h4>
+          <p style="font-size:13px;color:#6b7280;margin-bottom:10px;">Povinnosti dle čl. 26 se uplatní pouze pro AI systémy definované jako high-risk dle čl. 6 + Annex III (např. credit scoring = Annex III bod 5(b)).</p>
+          <ul style="list-style:disc;padding-left:20px;font-size:14px;color:#374151;line-height:2;">
+            <li>Použití systému dle návodu poskytovatele</li>
+            <li>Lidský dohled — konkrétní člověk s kompetencí</li>
+            <li>Kontrola vstupních dat (relevance, reprezentativita)</li>
+            <li>Monitoring + hlášení incidentů</li>
+            <li>Uchovávání logů min. 6 měsíců</li>
+            <li>Informování klientů, že o nich rozhoduje AI (čl. 26/11)</li>
+            <li>FRIA u credit scoringu (Annex III bod 5(b))</li>
+          </ul>
+        </div>
+        <div style="margin-bottom:16px;">
+          <h4 style="font-weight:700;margin-bottom:10px;color:#001e17;">Sankce AI Act</h4>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="background:#fee2e2;border-radius:6px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;"><span style="font-size:13px;font-weight:600;">Zakázané praktiky (čl. 5)</span><span style="font-weight:700;color:#991b1b;">35 mil. EUR / 7 % obratu</span></div>
+            <div style="background:#fef3c7;border-radius:6px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;"><span style="font-size:13px;font-weight:600;">Vysoce rizikové povinnosti</span><span style="font-weight:700;color:#92400e;">15 mil. EUR / 3 % obratu</span></div>
+            <div style="background:#f0fdf4;border-radius:6px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;"><span style="font-size:13px;font-weight:600;">Nepravdivé informace úřadům</span><span style="font-weight:700;color:#166534;">7,5 mil. EUR / 1 % obratu</span></div>
+          </div>
+        </div>
+        <div style="background:#f9f9f9;border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#6b7280;">
+          ⏳ <strong>Digital Omnibus (5/2026):</strong> Zvažuje se odložení pravidel pro vysoce rizikové AI systémy. Sledujte aktualizace na <a href="https://asociace.ai/eu-ai-act/" target="_blank" class="legal-link">asociace.ai</a>.
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          <a href="https://asociace.ai/eu-ai-act/" target="_blank" class="legal-link">📖 AI Act průvodce (Česká asociace AI) ↗</a>
+          <a href="https://eur-lex.europa.eu/legal-content/CS/TXT/?uri=CELEX:32024R1689" target="_blank" class="legal-link">📄 AI Act plný text (EUR-Lex) ↗</a>
+        </div>
+      `
+    },
+    {
+      title: "2. GDPR: Jaká data a proč",
+      icon: "🔐",
+      summary: "GDPR definuje pravidla pro zpracování osobních údajů. Klíčové: DPA (čl. 28), zvláštní kategorie (čl. 9), archivační lhůty.",
+      content: `
+        <div style="margin-bottom:16px;">
+          <h4 style="font-weight:700;margin-bottom:8px;color:#001e17;">Osobní údaje — co je co (čl. 4 GDPR)</h4>
+          <p style="font-size:14px;color:#374151;line-height:1.7;">Jakákoliv informace, na základě které lze přímo nebo nepřímo identifikovat konkrétní osobu. Pro finančního poradce: jméno klienta, telefon, e-mail, adresa, číslo smlouvy, příjmy.</p>
+          <a href="https://www.privacy-regulation.eu/cs/4.htm" target="_blank" class="legal-link" style="margin-top:8px;display:inline-flex;">čl. 4 GDPR — Definice ↗</a>
+        </div>
+        <div style="background:#fee2e2;border-radius:8px;padding:14px;margin-bottom:16px;">
+          <h4 style="font-weight:700;margin-bottom:8px;color:#991b1b;">Zvláštní kategorie — proč jsou tak přísné (čl. 9 GDPR)</h4>
+          <p style="font-size:14px;color:#374151;line-height:1.7;">Zdravotní údaje, biometrika, trestní záznamy. GDPR zakazuje jejich zpracování s výjimkami (souhlas, zákonný titul dle čl. 9/2). <strong>Lékařská zpráva klienta = čl. 9. Vložit ji do ChatGPT = zpracování bez právního titulu, bez DPA, bez souhlasu na TOTO konkrétní zpracování.</strong></p>
+          <a href="https://www.privacy-regulation.eu/cs/9.htm" target="_blank" class="legal-link" style="margin-top:8px;display:inline-flex;">čl. 9 GDPR — Zvláštní kategorie ↗</a>
+        </div>
+        <div style="background:#fff7ed;border-radius:8px;padding:14px;margin-bottom:16px;">
+          <h4 style="font-weight:700;margin-bottom:8px;color:#c2410c;">Rodné číslo — speciální český režim</h4>
+          <p style="font-size:14px;color:#374151;line-height:1.7;">RČ má v ČR vlastní zákonný režim NAD RÁMEC GDPR. Smíte ho zpracovávat jen se souhlasem nositele nebo pokud to stanoví zvláštní zákon (AML, daně). Vložení RČ do veřejného ChatGPT = porušení § 13c.</p>
+          <a href="https://www.zakonyprolidi.cz/cs/2000-133#p13c" target="_blank" class="legal-link" style="margin-top:8px;display:inline-flex;">§ 13c z. 133/2000 Sb. ↗</a>
+        </div>
+        <div style="background:#f0fdf4;border-radius:8px;padding:14px;margin-bottom:16px;">
+          <h4 style="font-weight:700;margin-bottom:8px;color:#166534;">Zpracovatel a DPA (čl. 28 GDPR)</h4>
+          <p style="font-size:14px;color:#374151;line-height:1.7;">Když dáte klientská data do AI nástroje, poskytovatel AI se stává zpracovatelem vašich dat. GDPR vyžaduje zpracovatelskou smlouvu (DPA). <strong>Consumer verze ChatGPT/Claude/Gemini žádnou DPA nenabízí — klientská data tam NESMÍTE dát, i kdyby byl opt-out ze tréninku.</strong></p>
+          <a href="https://www.privacy-regulation.eu/cs/28.htm" target="_blank" class="legal-link" style="margin-top:8px;display:inline-flex;">čl. 28 GDPR — Zpracovatel ↗</a>
+        </div>
+        <div style="margin-bottom:16px;">
+          <h4 style="font-weight:700;margin-bottom:12px;color:#001e17;">Archivační lhůty vs. GDPR — konflikt</h4>
+          <table style="width:100%;border-collapse:collapse;font-size:13px;">
+            <tr style="background:#001e17;color:#fff;"><th style="padding:8px 12px;text-align:left;">Norma</th><th style="padding:8px 12px;text-align:left;">Co se uchovává</th><th style="padding:8px 12px;text-align:left;">Lhůta</th></tr>
+            <tr style="background:#f9f9f9;"><td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;">AML — z. 253/2008 Sb.</td><td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;">Identifikační údaje, záznamy o kontrole</td><td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;font-weight:700;">10 let</td></tr>
+            <tr><td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;">Distribuce pojištění — z. 170/2018 Sb.</td><td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;">Dokumenty z distribuce</td><td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;font-weight:700;">10 let</td></tr>
+            <tr style="background:#f9f9f9;"><td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;">Spotřebitelský úvěr — z. 257/2016 Sb.</td><td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;">Smlouvy, posouzení úvěruschopnosti</td><td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;font-weight:700;">min. 5 let</td></tr>
+            <tr><td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;">GDPR</td><td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;">Princip minimalizace</td><td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;font-weight:700;">Nejkratší nutná doba</td></tr>
+          </table>
+          <p style="font-size:13px;color:#6b7280;margin-top:10px;">GDPR říká 'nedržte déle než nutné'. AML říká 'držte 10 let'. Řešení: archivovat v rámci zákonné povinnosti, vyloučit z aktivního zpracování. AI nástroje nesmí přistupovat k archivu.</p>
+        </div>
+      `
+    },
+    {
+      title: "3. CLOUD Act: Proč Enterprise nestačí pro Restricted data",
+      icon: "🇺🇸",
+      summary: "Všichni 4 poskytovatelé jsou americké firmy. US zákon CLOUD Act (2018) umožňuje americkým orgánům žádat o data kdekoliv na světě.",
+      content: `
+        <div style="background:#fee2e2;border-radius:8px;padding:14px;margin-bottom:16px;">
+          <p style="font-size:14px;color:#374151;font-weight:600;margin-bottom:8px;">⚠️ Klíčové upozornění</p>
+          <p style="font-size:14px;color:#374151;line-height:1.7;">Všichni 4 poskytovatelé (OpenAI, Anthropic, Google, Microsoft) jsou americké firmy. US zákon CLOUD Act (2018) umožňuje americkým orgánům za podmínek trestního řízení žádat o data uložená kdekoliv na světě — i na serverech v EU. To je v potenciálním rozporu s GDPR.</p>
+        </div>
+        <div style="margin-bottom:16px;">
+          <h4 style="font-weight:700;margin-bottom:8px;color:#001e17;">Co to znamená v praxi</h4>
+          <p style="font-size:14px;color:#374151;line-height:1.7;">I když máte ChatGPT Enterprise s EU data residency a DPA, americký soud může za podmínek trestního řízení přikázat OpenAI vydat vaše data. Toto riziko je reálné, ale nejednoduchá realizace. Proto pro Restricted data (lékařské zprávy, RČ) doporučujeme: buď pseudonymizace PŘED odesláním do AI, nebo on-premise/EU řešení.</p>
+        </div>
+        <div style="margin-bottom:16px;">
+          <h4 style="font-weight:700;margin-bottom:8px;color:#001e17;">Jak mitigovat riziko</h4>
+          <ul style="list-style:disc;padding-left:20px;font-size:14px;color:#374151;line-height:2;">
+            <li>Pseudonymizace dat PŘED odesláním do AI (Klient_001 místo jméno, ID_001 místo RČ)</li>
+            <li>Client-side šifrování</li>
+            <li>Minimalizace dat — posílejte jen to nejnutnější</li>
+            <li>Pro nejcitlivější data: on-premise řešení nebo EU AI providery</li>
+          </ul>
+        </div>
+        <a href="https://www.eurojust.europa.eu/publication/cloud-act" target="_blank" class="legal-link">📖 CLOUD Act — analýza Eurojust ↗</a>
+      `
+    },
+    {
+      title: "4. Mlčenlivost finančního poradce vs. AI",
+      icon: "🤫",
+      summary: "Jako pojišťovací zprostředkovatel nebo úvěrový poradce máte zákonnou mlčenlivost. Porušení při předání dat do AI bez DPA.",
+      content: `
+        <div style="background:#f0fdf4;border-radius:8px;padding:14px;margin-bottom:16px;">
+          <p style="font-size:14px;color:#374151;line-height:1.7;">Jako pojišťovací zprostředkovatel nebo úvěrový poradce máte zákonnou mlčenlivost. Vložení dat klienta do AI nástroje, který je odesílá na servery třetí strany bez DPA, může představovat porušení mlčenlivosti.</p>
+        </div>
+        <div style="margin-bottom:16px;">
+          <h4 style="font-weight:700;margin-bottom:8px;color:#001e17;">Relevantní právní základy</h4>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <a href="https://www.zakonyprolidi.cz/cs/2016-257#p117" target="_blank" class="legal-link">§ 117 z. 257/2016 Sb. — mlčenlivost úvěrového zprostředkovatele ↗</a>
+            <a href="https://www.zakonyprolidi.cz/cs/2008-253#p38" target="_blank" class="legal-link">§ 38 z. 253/2008 Sb. — AML mlčenlivost ↗</a>
+          </div>
+        </div>
+        <div style="background:#fef3c7;border-radius:8px;padding:12px 16px;font-size:13px;color:#92400e;">
+          <strong>Poznámka k judikatuře:</strong> Žádný český soud zatím nerozhodoval, zda vložení do ChatGPT = porušení mlčenlivosti. Konzervativní (a bezpečný) výklad: ANO, pokud nástroj data sdílí mimo kontrolu poradce.
+        </div>
+      `
+    }
+  ];
+  
+  container.innerHTML = panels.map(panel => `
+    <div style="border:1px solid #def6cb;border-radius:12px;margin-bottom:12px;overflow:hidden;background:#fff;">
+      <button class="accordion-btn" onclick="toggleAccordion(this)" style="padding:20px 24px;border-bottom:none;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span style="font-size:24px;">${panel.icon}</span>
+          <div style="text-align:left;">
+            <div style="font-size:17px;font-weight:700;">${panel.title}</div>
+            <div style="font-size:13px;color:#6b7280;font-weight:400;margin-top:2px;">${panel.summary}</div>
+          </div>
+        </div>
+        <svg class="chevron" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="#7ad654" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="accordion-content" style="padding:0 24px;">
+        <div style="padding-bottom:20px;">${panel.content}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderActionSteps() {
+  const today = [
+    { text: "ChatGPT: Otevřete Settings → Data Controls → vypněte 'Improve the model'" },
+    { text: "Claude: Otevřete Settings → Privacy → vypněte 'Help improve Claude'" },
+    { text: "Gemini osobní: Jděte do Gemini Activity → vypněte ukládání konverzací" }
+  ];
+  const month = [
+    { text: "Vytvořte si interní politiku AI použití — kdo, co, do jakého nástroje" },
+    { text: "Zkontrolujte, jaká data aktuálně vkládáte do jakých AI nástrojů" },
+    { text: "Zaveďte pseudonymizační praxi pro klientská data před jejich zadáváním do AI" }
+  ];
+  const quarter = [
+    { text: "Zvažte přechod na Enterprise licenci s DPA pro systematické použití AI s klientskými daty" },
+    { text: "Proveďte DPIA před nasazením AI na klientská data (povinné dle čl. 35 GDPR)" },
+    { text: "Nastavte pseudonymizační workflow (Make/Cursor skript) pro automatizované zpracování" }
+  ];
+  
+  const renderSteps = (steps, containerId) => {
+    document.getElementById(containerId).innerHTML = steps.map((step, i) => `
+      <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" class="check-icon" style="display:none;"><path d="M2 6l3 3 5-5" stroke="#001e17" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div style="font-size:14px;color:rgba(255,255,255,0.85);line-height:1.5;">${step.text}</div>
+      </div>
+    `).join('');
+  };
+  
+  renderSteps(today, 'todaySteps');
+  renderSteps(month, 'monthSteps');
+  renderSteps(quarter, 'quarterSteps');
+}
+
+// =============================================================================
+// MODAL / CELL DETAIL
+// =============================================================================
+
+function openCellModal(toolId, category) {
+  const tool = tools.find(t => t.id === toolId);
+  if (!tool) return;
+  
+  const verdict = tool.verdicts[category];
+  const catLabels = { public: '🌐 Public — Veřejná data', internal: '🏢 Internal — Interní data', confidential: '🔒 Confidential — Klientská data', restricted: '🚨 Restricted — Citlivá data' };
+  
+  document.getElementById('cellModalContent').innerHTML = `
+    <div style="margin-bottom:20px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <div class="tool-icon tool-icon-${tool.provider}">${getProviderIcon(tool.provider)}</div>
+        <div>
+          <div style="font-weight:700;font-size:18px;">${tool.name}</div>
+          <span class="provider-badge ${getProviderClass(tool.provider)}">${getProviderLabel(tool.provider)}</span>
+          <span style="font-size:13px;color:#6b7280;margin-left:6px;">${tool.priceRange}</span>
+        </div>
+      </div>
+      <div style="font-size:14px;color:#6b7280;font-weight:500;margin-bottom:8px;">${catLabels[category]}</div>
+      <div class="verdict-badge ${getStatusClass(verdict.status)}" style="font-size:15px;padding:8px 16px;margin-bottom:16px;">
+        ${getStatusEmoji(verdict.status)} ${getStatusLabel(verdict.status)}
+      </div>
+    </div>
+    
+    <!-- Layer 1: Short note -->
+    <div style="background:#f9fafb;border-radius:8px;padding:14px;margin-bottom:16px;font-size:15px;font-weight:500;color:#374151;line-height:1.6;">
+      ${verdict.shortNote}
+    </div>
+    
+    <!-- Layer 2: Proč -->
+    <div style="border:1px solid #def6cb;border-radius:8px;margin-bottom:12px;overflow:hidden;">
+      <button class="accordion-btn" onclick="toggleAccordion(this)" style="padding:12px 16px;">
+        <span>📖 Proč? — Podrobné vysvětlení</span>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#7ad654" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="accordion-content" style="padding:0 16px;">
+        <p style="font-size:14px;color:#374151;line-height:1.7;padding-bottom:16px;">${verdict.whyExplanation}</p>
+      </div>
+    </div>
+    
+    <!-- Layer 3: Legal basis -->
+    <div style="border:1px solid #def6cb;border-radius:8px;margin-bottom:20px;overflow:hidden;">
+      <button class="accordion-btn" onclick="toggleAccordion(this)" style="padding:12px 16px;">
+        <span>⚖️ Právní základ — Klikatelné odkazy</span>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#7ad654" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="accordion-content" style="padding:0 16px;">
+        <div style="padding-bottom:16px;display:flex;flex-direction:column;gap:8px;">
+          ${verdict.legalRefs.map(ref => `<a href="${ref.url}" target="_blank" class="legal-link">${ref.displayText} ↗</a>`).join('')}
+        </div>
+      </div>
+    </div>
+    
+    <!-- Tool details summary -->
+    <div style="background:#f2fbec;border-radius:8px;padding:14px;margin-bottom:20px;">
+      <div style="font-weight:600;font-size:13px;color:#001e17;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px;">Klíčové parametry nástroje</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px;">
+        <div><span style="color:#6b7280;">Trénování:</span> <strong>${tool.training.uses ? '⚠️ Defaultně zapnuto' : '✅ Nezpracovává'}</strong></div>
+        <div><span style="color:#6b7280;">DPA:</span> <strong>${tool.dpa.available ? '✅ K dispozici' : '❌ Bez DPA'}</strong></div>
+        <div><span style="color:#6b7280;">EU hosting:</span> <strong>${tool.euHosting.available === 'yes' ? '✅ Dostupný' : tool.euHosting.available === 'possible' ? '⚠️ Možný' : '❌ Nedostupný'}</strong></div>
+        <div><span style="color:#6b7280;">ZDR:</span> <strong>${tool.zdr.available === 'yes' ? '✅' : tool.zdr.available === 'on_request' ? '⚠️ Na žádost' : '❌'}</strong></div>
+      </div>
+      <div style="margin-top:10px;padding-top:10px;border-top:1px solid #def6cb;font-size:13px;"><span style="color:#6b7280;">Retence:</span> ${tool.retention.duration}</div>
+    </div>
+    
+    <div style="background:#fef3c7;border-radius:8px;padding:12px 16px;margin-bottom:20px;font-size:13px;color:#92400e;">
+      <strong>💡 Praktický tip:</strong> ${tool.practicalTip}
+    </div>
+    
+    <div style="text-align:center;">
+      <a href="${tool.officialUrl}" target="_blank"><button class="btn-primary" style="width:100%;">🌐 Navštívit stránku licence ↗</button></a>
+    </div>
+  `;
+  
+  document.getElementById('cellModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('cellModal')) return;
+  document.getElementById('cellModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// close with X button (no event target check)
+document.addEventListener('DOMContentLoaded', () => {});
+
+// =============================================================================
+// WIZARD
+// =============================================================================
+
+function selectDataType(type) {
+  wizardState.type = type;
+  
+  if (type === 'public') {
+    // Direct to results
+    wizardState.detail = 'public';
+    showStep(3);
+    renderWizardResults(type, null);
+    return;
+  }
+  
+  const config = wizardDataTypes[type];
+  if (config.steps) {
+    document.getElementById('step2Title').textContent = `Upřesněte: ${config.label}`;
+    document.getElementById('step2Cards').innerHTML = config.steps.map(s => `
+      <div class="data-card" onclick="selectDataDetail('${type}','${s.id}')">
+        <div style="font-weight:700;font-size:16px;margin-bottom:6px;color:#001e17;">${s.label}</div>
+        <div style="color:#6b7280;font-size:14px;">${s.desc}</div>
+      </div>
+    `).join('');
+    showStep(2);
+  } else {
+    renderWizardResults(type, null);
+    showStep(3);
+  }
+}
+
+function selectDataDetail(type, detailId) {
+  wizardState.detail = detailId;
+  renderWizardResults(type, detailId);
+  showStep(3);
+}
+
+function renderWizardResults(type, detail) {
+  const dataCategory = type === 'public' ? 'public' : type === 'internal' ? 'internal' : type === 'confidential' ? 'confidential' : 'restricted';
+  
+  const typeLabels = { public: 'Veřejná data', internal: 'Interní firemní data', confidential: 'Klientská běžná data', restricted: 'Klientská citlivá data' };
+  document.getElementById('step3Title').textContent = `Výsledek: ${typeLabels[type]}`;
+  document.getElementById('step3Subtitle').textContent = `Nástroje vhodné pro vaše data`;
+  
+  // Special warning for restricted
+  if (type === 'restricted') {
+    document.getElementById('step3Content').innerHTML = `
+      <div style="background:#fee2e2;border:2px solid #ef4444;border-radius:12px;padding:20px;margin-bottom:24px;text-align:center;">
+        <div style="font-size:48px;margin-bottom:8px;">🚨</div>
+        <h3 style="font-weight:700;font-size:20px;color:#991b1b;margin-bottom:8px;">Extrémně citlivá data</h3>
+        <p style="font-size:15px;color:#7f1d1d;line-height:1.6;">Tato data vyžadují zvláštní režim. <strong>Žádný AI nástroj v osobní verzi není vhodný.</strong> Pro tyto data doporučujeme konzultaci s právníkem a zvážení on-premise řešení.</p>
+      </div>
+      ${renderResultCards(dataCategory)}
+    `;
+    return;
+  }
+  
+  document.getElementById('step3Content').innerHTML = renderResultCards(dataCategory);
+}
+
+function renderResultCards(category) {
+  const allowed = tools.filter(t => t.verdicts[category].status === 'allowed');
+  const conditional = tools.filter(t => t.verdicts[category].status === 'conditional');
+  const forbidden = tools.filter(t => t.verdicts[category].status === 'forbidden');
+  
+  const renderToolCards = (toolList, statusClass, label) => {
+    if (!toolList.length) return '';
+    return `
+      <div style="margin-bottom:24px;">
+        <div class="verdict-badge ${statusClass}" style="font-size:14px;padding:8px 14px;margin-bottom:12px;">${label} (${toolList.length})</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          ${toolList.map(t => `
+            <div class="${statusClass}" style="border-radius:10px;padding:14px 16px;cursor:pointer;border:1px solid;" onclick="openCellModal('${t.id}','${category}')">
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <div class="tool-icon tool-icon-${t.provider}" style="width:32px;height:32px;font-size:14px;">${getProviderIcon(t.provider)}</div>
+                  <div>
+                    <div style="font-weight:700;font-size:15px;">${t.name}</div>
+                    <div style="font-size:12px;opacity:0.7;">${t.priceRange}</div>
+                  </div>
+                </div>
+                <span style="font-size:12px;font-weight:600;">Detail →</span>
+              </div>
+              <div style="font-size:13px;margin-top:8px;opacity:0.85;">${t.verdicts[category].shortNote}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  };
+  
+  return renderToolCards(allowed, 'verdict-allowed', '✅ Povoleno') + 
+         renderToolCards(conditional, 'verdict-conditional', '⚠️ S podmínkami') + 
+         renderToolCards(forbidden, 'verdict-forbidden', '🚫 Neakceptovatelné');
+}
+
+function showStep(stepNum) {
+  document.querySelectorAll('.wizard-step').forEach(s => s.classList.remove('active'));
+  document.getElementById(`step${stepNum}`).classList.add('active');
+  wizardState.step = stepNum;
+  
+  const labels = { 1: 'Krok 1 ze 3', 2: 'Krok 2 ze 3', 3: 'Výsledek' };
+  const names = { 1: 'Typ dat', 2: 'Detail', 3: 'Nalezené nástroje' };
+  const widths = { 1: '33%', 2: '66%', 3: '100%' };
+  
+  document.getElementById('stepLabel').textContent = labels[stepNum];
+  document.getElementById('stepName').textContent = names[stepNum];
+  document.getElementById('progressFill').style.width = widths[stepNum];
+}
+
+function wizardBack() {
+  if (wizardState.step === 2) showStep(1);
+  if (wizardState.step === 3) {
+    if (wizardDataTypes[wizardState.type]?.steps) showStep(2);
+    else showStep(1);
+  }
+}
+
+function wizardReset() {
+  wizardState = { type: null, detail: null, step: 1 };
+  showStep(1);
+  document.querySelectorAll('.data-card').forEach(c => c.classList.remove('selected'));
+}
+
+// =============================================================================
+// ACCORDION
+// =============================================================================
+
+function toggleAccordion(btn) {
+  const content = btn.nextElementSibling;
+  const isOpen = btn.classList.contains('open');
+  btn.classList.toggle('open', !isOpen);
+  content.classList.toggle('open', !isOpen);
+}
+
+// =============================================================================
+// FILTERS
+// =============================================================================
+
+function filterMatrix() { renderMatrix(); }
+
+function clearFilters() {
+  document.getElementById('filterProvider').value = '';
+  document.getElementById('filterLicense').value = '';
+  document.getElementById('filterSafe').value = '';
+  renderMatrix();
+}
+
+// =============================================================================
+// CHECK ITEMS
+// =============================================================================
+
+function toggleCheck(item) {
+  const box = item.querySelector('.check-box');
+  const icon = item.querySelector('.check-icon');
+  const isChecked = box.classList.contains('checked');
+  box.classList.toggle('checked', !isChecked);
+  icon.style.display = isChecked ? 'none' : 'block';
+}
+
+// =============================================================================
+// NAV
+// =============================================================================
+
+function toggleNav() {
+  document.getElementById('navLinks').classList.toggle('open');
+}
+
+// Close nav on link click
+document.addEventListener('click', (e) => {
+  if (e.target.classList.contains('nav-link')) {
+    document.getElementById('navLinks').classList.remove('open');
+  }
+});
+
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+
+// Close modal on escape
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.getElementById('cellModal').classList.remove('open');
+    document.body.style.overflow = '';
+    closeBottomSheet();
+  }
+});
+
+// Bottom sheet functions
+function closeBottomSheet() {
+  document.getElementById('bottomSheet').classList.remove('open');
+  document.getElementById('bottomSheetOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Close modal via overlay click
+document.getElementById('cellModal').addEventListener('click', function(e) {
+  if (e.target === this) {
+    this.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+});
+
+// =============================================================================
+// INIT
+// =============================================================================
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderMatrix();
+  renderClassification();
+  renderGlossary();
+  renderRegulace();
+  renderActionSteps();
+});
+</script>
+</body>
+</html>
