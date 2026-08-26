@@ -870,13 +870,13 @@ const classificationData = [
   { type: "Jméno a příjmení", gdpr: "čl. 4 (osobní údaj)", classLabel: "Důvěrné", regime: "Smluvní titul, AML", aiMode: "Jen Enterprise / DPA", classColor: "#f97316" },
   { type: "Telefon, e-mail, adresa", gdpr: "čl. 4 (osobní údaj)", classLabel: "Důvěrné", regime: "čl. 6/1/b nebo f GDPR", aiMode: "Jen Enterprise / DPA", classColor: "#f97316" },
   { type: "Rodné číslo", gdpr: "čl. 4 + čl. 87 GDPR + národní zákon", classLabel: "Kritické", regime: "§ 13c z. 133/2000 Sb.", aiMode: "NIKDY bez pseudonymizace", classColor: "#ef4444" },
-  { type: "Číslo OP / pasu", gdpr: "čl. 4 (identifikační doklad)", classLabel: "Kritické", regime: "AML § 8", aiMode: "Jen Enterprise + DPA + ZDR; nedoporučuje se", classColor: "#ef4444" },
+  { type: "Číslo OP / pasu", gdpr: "čl. 4 (identifikační doklad); kopie s fotografií i čl. 9 (podobizna k identifikaci)", classLabel: "Kritické", regime: "AML § 8", aiMode: "Jen Enterprise + DPA + ZDR; nedoporučuje se", classColor: "#ef4444" },
   { type: "Smlouva o pojištění", gdpr: "čl. 4 (osobní údaj)", classLabel: "Důvěrné", regime: "Z. 170/2018 Sb. § 80 — 10 let", aiMode: "Jen Enterprise / DPA, ideálně pseudonymizováno", classColor: "#f97316" },
   { type: "Smlouva o spotřebitelském úvěru", gdpr: "čl. 4 (osobní údaj)", classLabel: "Důvěrné", regime: "Z. 257/2016 Sb. § 78 — min. 5 let", aiMode: "Jen Enterprise / DPA", classColor: "#f97316" },
   { type: "Údaje o příjmech / majetku", gdpr: "čl. 4 (osobní údaj)", classLabel: "Důvěrné", regime: "Smluvní + AML", aiMode: "Jen Enterprise / DPA", classColor: "#f97316" },
   { type: "Číslo bankovního účtu", gdpr: "čl. 4 (osobní údaj)", classLabel: "Důvěrné", regime: "čl. 6/1/b + AML", aiMode: "Jen Enterprise / DPA, prefer pseudonymizace", classColor: "#f97316" },
   { type: "Lékařská zpráva", gdpr: "čl. 9 (zdravotní údaj)", classLabel: "Kritické", regime: "Souhlas čl. 9/2/a + zákon o zdrav. službách", aiMode: "NIKDY do běžných AI; jen on-premise + DPIA", classColor: "#ef4444" },
-  { type: "Policejní protokol / výpis RT", gdpr: "čl. 10 (trestní údaj)", classLabel: "Kritické", regime: "Jen pod dozorem orgánu veřejné moci", aiMode: "NIKDY do AI", classColor: "#ef4444" },
+  { type: "Policejní protokol / výpis RT", gdpr: "čl. 10 (trestní údaj)", classLabel: "Kritické", regime: "Jen pod dozorem orgánu veřejné moci; DPIA dle čl. 35/3/b", aiMode: "NIKDY do AI", classColor: "#ef4444" },
   { type: "Biometrika (foto pro KYC)", gdpr: "čl. 9 (pokud k identifikaci)", classLabel: "Kritické", regime: "Souhlas + DPIA", aiMode: "NIKDY do běžných AI bez DPIA", classColor: "#ef4444" }
 ];
 
